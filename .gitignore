@@ -31,11 +31,15 @@ coverage
 
 # Compiled binary addons (https://nodejs.org/api/addons.html)
 build/Release
+out/
+
+#sqlite
+*.sqlite
 
 # Dependency directories
 node_modules/
 jspm_packages/
-
+src/lib/
 # TypeScript v1 declaration files
 typings/
 
