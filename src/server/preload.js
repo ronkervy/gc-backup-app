@@ -27,6 +27,32 @@ contextBridge.exposeInMainWorld(
 	 }catch(err){
 	    return err.response.data;
 	 } 
+      },
+
+      CreateBackup: async(data)=>{
+	 try{
+	    const res = await BackupService({
+		url: "/backups",
+		method: "POST",
+		data: data
+	    });
+	    return res.data;
+	 }catch(err){
+	    return err.response.data;
+	 }
+      },
+
+      RestoreBackup: async(data)=>{
+	  try{
+	      const res = await BackupService({
+		  url: "/backups/restore",
+		  method: "POST",
+		  data: data
+	      });
+	      return res.data;
+	  }catch(err){
+	      return err.response.data;
+	  }
       }
   }
 )

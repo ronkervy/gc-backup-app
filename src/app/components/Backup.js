@@ -1,4 +1,4 @@
-import React,{ useEffect } from 'react';
+import React,{ useEffect,useState } from 'react';
 import { useDispatch } from 'react-redux';
 import {
   Button,
@@ -9,8 +9,14 @@ import {
 import { BackupList } from '../store/backup.services';
 
 function Backup() {
-
+    
+    const [path,setPath] = useState('');
     const dispatch = useDispatch();
+
+    const selectedPath = (e)=>{
+	e.preventDefault();
+	setPath(window.dialogAPI.OpenDialog());
+    }
 
     useEffect(()=>{
       dispatch( BackupList() );
@@ -20,7 +26,13 @@ function Backup() {
 	<div>
 	    <Grid container>
 		<Grid item lg={12}>
-		    <InputBase placeholder="Browse" type="file" />
+		    <InputBase 
+			placeholder="Browse" 
+			type="file"
+			value={path}
+			variant="contained"
+			onClick={selectedPath}
+		    />
 		</Grid>
 		<Grid item lg={12}>
 		    <Button

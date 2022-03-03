@@ -1,4 +1,4 @@
-const db = require('../../config/db.config');
+const { db } = require('../../config/db.config');
 const { DataTypes } = require('sequelize');
 const BackupModel = db.define('Backup', {
     id: {
