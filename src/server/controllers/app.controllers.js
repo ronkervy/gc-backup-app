@@ -27,6 +27,7 @@ module.exports = {
 	      const { totalSize,totalSizeMb } = resultDB;
 	      console.log(totalSizeMb);
 	      res.status(200).json({
+		  databases: dbNames,
 		  dbCount: dbNames.length,
 		  sizeOfDb: totalSizeMb + ' MB',
 		  ...collections
