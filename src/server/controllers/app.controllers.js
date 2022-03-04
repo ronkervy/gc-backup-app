@@ -13,24 +13,27 @@ module.exports = {
 	  const resultDB = await con.db().admin().listDatabases();
 	  const dbNames = [];
 	  const dbCollections = [];
-
-	  resultDB["databases"].map((db,i)=>{
+  
+	  resultDB["databases"].map( async(db,i)=>{
 	      dbNames.push(db.name);
 	  });
 
-	  dbNames.map(async(name,i)=>{  
-	      await con.db(name).listCollections().toArray().then(resCollections=>{
-		  dbCollections.push(resCollections);
+	  Promise.all(
+	    dbNames.map(async(name,i)=>{
+	      const resColl = await con.db(name).listCollections().toArray();
+	      return {...resColl,dbName: name};
+	    })
+	  ).then(collections=>{
+	      const { totalSize,totalSizeMb } = resultDB;
+	      console.log(totalSizeMb);
+	      res.status(200).json({
+		  dbCount: dbNames.length,
+		  sizeOfDb: totalSizeMb + ' MB',
+		  ...collections
 	      });
 	  });
 
-	  console.log(dbCollections);
-
-	  return res.status(200).json({
-	      ...resultDB,
-	      dbCollections,
-	      dbNames
-	  });
+	  	  
 
 	}catch(err){
 	    return next(createHttpError.Unauthorized({
