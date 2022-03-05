@@ -8,10 +8,18 @@ const BackupService = axios.create({
 });
 
 contextBridge.exposeInMainWorld(
-  'dialogAPI',
+  'FileAPI',
+  {
+    FileList: (fPath)=> ipcRenderer.invoke('file:list',{ fPath })  
+  }
+);
+
+contextBridge.exposeInMainWorld(
+  'DialogAPI',
   {
     OpenDialog: ()=> ipcRenderer.invoke('dialog:open')
-  }
+  },
+  
 );
 
 contextBridge.exposeInMainWorld(

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import {BackupList} from './backup.services';
+import {BackupList,CreateBackup} from './backup.services';
 
 const BackupSlice = createSlice({
   name: 'backup',
@@ -17,6 +17,17 @@ const BackupSlice = createSlice({
 	  state.entities = payload;
       })
       .addCase(BackupList.rejected,(state,{ payload })=>{
+	  state.loading = false;
+	  state.error = payload;
+      })
+      .addCase(CreateBackup.pending, state=>{
+	  state.loading = true;
+      })
+      .addCase(CreateBackup.fulfilled,(state,{ payload })=>{
+	  state.loading = false;
+	  state.entities = payload;
+      })
+      .addCase(CreateBackup.rejected,(state,{ payload })=>{
 	  state.loading = false;
 	  state.error = payload;
       })

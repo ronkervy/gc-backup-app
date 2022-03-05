@@ -1,4 +1,11 @@
-const { app, BrowserWindow,session,dialog,ipcMain } = require('electron');
+const { 
+  app, 
+  BrowserWindow,
+  session,
+  dialog,
+  ipcMain,
+  shell
+} = require('electron');
 const path = require('path');
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -75,11 +82,16 @@ ipcMain.handle('dialog:open', async()=>{
 	properties: ['openDirectory']
       });
       console.log(dialogPath); 
-      return dialogPath;
+      return dialogPath[0];
    }catch(err){
-      return err;
+      return "Please Select a folder";
    }
-})
+});
+
+ipcMain.handle('file:list', async(e,fPath)=>{
+    console.log("Main : ",fPath);
+    return await shell.showItemInFolder(path.join(app.getAppPath(),'./'));
+});
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.

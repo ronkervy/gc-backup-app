@@ -25,6 +25,12 @@ export const BackupList = createAsyncThunk(
 export const CreateBackup = createAsyncThunk(
   'backup/CreateBackup',
   async(args,{ rejectWithValue })=>{
-
+      try{
+	const res = await window.APIV1.CreateBackup(args);
+	await sleep(1000);
+	return res;
+      }catch(err){
+	return err;
+      }
   }
 );

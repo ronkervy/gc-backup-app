@@ -51,13 +51,15 @@ module.exports = {
     
     CreateBackup: async(req,res,next)=>{
 	try{
-	    const { path } = req.body;
-	    let execPath = path.join(__dirname,'../../lib/mongodump.exe');
-	    const resBackup = await execFileSync(execPath,[`/gzip`,`/db:airbnb`,`/out:./`]);
+	    const { path: fpath } = req.body;
+	    let filePath =  fpath !== '' ? fpath : path.join(__dirname,'./backups');
+ 	    let execPath = path.join(__dirname,'../../lib/mongodump.exe');
+	    const resBackup = await execFileSync(execPath,[`/gzip`,`/db:airbnb`,`/out:${filePath}`]);
 	    if( resBackup ){
 		res.status(201).json({
 		    payloadType: typeof(resBackup),
-		    resBackup
+		    resBackup,
+		    message: 'Backup Complete'
 		});
 	    }else{
 		return next(createHttpError.BadRequest({
@@ -71,11 +73,24 @@ module.exports = {
     
     RestoreBackup: async(req,res,next)=>{
 	try{
-	  const { path } = req.body;
+	  const { path: fPath } = req.body;
+	  const filePath = fPath !== '' ? fPath : path.join(__dirname,'./backups');
 	  let execPath = path.join(__dirname,'../../lib/mongorestore.exe');
-
+	  const resRestore = await execFileSync(execPath,[`/db:airbnb`,`/dir:${filePath}`,`/gzip`]);
+	  if(resRestore){
+	      res.status(200).json({
+		  resRestore,
+		  message: 'Restore Complete'
+	      });
+	  }else{
+	      return next(createHttpError.InternalServerError({
+		  message: 'Error restoring from backup.'
+	      }));
+	  }
 	}catch(err){
-	  
+	      return next(createHttpError.InternalServerError({
+		  message: err
+	      }));
 	}
     },
 
