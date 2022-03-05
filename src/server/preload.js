@@ -15,7 +15,7 @@ contextBridge.exposeInMainWorld(
 );
 
 contextBridge.exposeInMainWorld(
-  'gcAPIV1', 
+  'APIV1', 
   {
       BackupList: async()=>{
 	 try{

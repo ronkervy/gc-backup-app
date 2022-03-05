@@ -13,7 +13,7 @@ export const BackupList = createAsyncThunk(
   'backup/BackupList',
   async(args,{ rejectWithValue })=>{
      try{
-	const res = await window.gcAPIV1.BackupList();
+	const res = await window.APIV1.BackupList();
 	await sleep(1000);
 	return res;
      }catch(err){
