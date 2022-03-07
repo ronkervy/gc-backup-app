@@ -58,4 +58,3 @@ function Backup() {
 }
 
 export default Backup;
-

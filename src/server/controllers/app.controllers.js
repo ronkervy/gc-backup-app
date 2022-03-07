@@ -1,4 +1,4 @@
-const BackupModel = require('../models/app.models');
+const BackupModel = require('../models/app.model');
 const { execFileSync } = require('child_process');
 const createHttpError = require('http-errors');
 const path = require('path');
@@ -94,8 +94,30 @@ module.exports = {
 	}
     },
 
-    ScheduleBackup: async()=>{
+    WeeklyBackup: async(req,res,next)=>{
+	try{
+	    console.log(gcSettings);
+	    await cron.schedule('0 8 */7 * *',()=>{
+		console.log('working weekly');
+	    });
+	    return res.status(200).json({
+		message: "Weekly Backup Running."
+	    });
+	}catch(err){
+	    return next(createHttpError.NotFound({
+		message: err
+	    }));
+	}
+    },
 
+    MonthlyBackup: async(req,res,next)=>{
+	try{
+	    cron.schedule('0 0 1 * *', ()=>{
+		console.log('Monthly Backup is active.');
+	    })	  
+	}catch(err){
+	    return next();
+	}
     },
 
     DeleteBackup: async()=>{
