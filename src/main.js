@@ -13,6 +13,19 @@ if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
+const { ElectronJSONSettingsStoreMain } = require('electron-json-settings-store');
+
+const schema = {
+    schedule : { type: 'string', default: '0 9 */7 * *' },
+    backupPath: { type: 'string', default: 'C:/backups' }
+}
+
+const store = new ElectronJSONSettingsStoreMain(schema,{ writeBeforeQuit: true });
+
+const initializeStore = async()=>{
+    await store.initSync();
+}
+
 let mainWindow;
 
 const createWindow = () => {
@@ -43,7 +56,7 @@ const createWindow = () => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', ()=>{
+app.on('ready',()=>{
   if( process.env.NODE_ENV == "development" ){
     const { 
       default: installExtension, 
@@ -55,7 +68,7 @@ app.on('ready', ()=>{
 	.then((name) => console.log(`Added Extension:  ${name}`))
 	.catch((err) => console.log('An error occurred: ', err));
   }
-
+  initializeStore();
   createWindow();
 });
 
@@ -90,8 +103,19 @@ ipcMain.handle('dialog:open', async()=>{
 
 ipcMain.handle('file:list', async(e,fPath)=>{
     console.log("Main : ",fPath);
-    return await shell.showItemInFolder(path.join(app.getAppPath(),'./'));
+    //return await shell.showItemInFolder(path.join(app.getAppPath(),'./'));
 });
+
+//HANDLES FOR SETTINGS
+ipcMain.handle('config:get', async()=>{
+    console.log(await store.getAll);
+});
+
+ipcMain.handle('config:set', async(e,args)=>{
+    await store.setAll(args);
+    await store.writeSync();
+    console.log(store.get('schedule'));
+})
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.

@@ -96,7 +96,6 @@ module.exports = {
 
     WeeklyBackup: async(req,res,next)=>{
 	try{
-	    console.log(gcSettings);
 	    await cron.schedule('0 8 */7 * *',()=>{
 		console.log('working weekly');
 	    });

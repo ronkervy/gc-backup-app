@@ -18,8 +18,15 @@ contextBridge.exposeInMainWorld(
   'DialogAPI',
   {
     OpenDialog: ()=> ipcRenderer.invoke('dialog:open')
-  },
-  
+  } 
+);
+
+contextBridge.exposeInMainWorld(
+  'ConfigAPI',
+  {
+    GetSettings: ()=> ipcRenderer.invoke('config:get'),
+    SetSettings: (args)=> ipcRenderer.invoke('config:set',args)
+  }
 );
 
 contextBridge.exposeInMainWorld(

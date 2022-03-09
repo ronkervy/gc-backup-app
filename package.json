@@ -48,6 +48,7 @@
       "electronRebuildConfig": {},
       "plugins": [
         [
+	  "@electron-forge/plugin-auto-unpack-natives",
           "@electron-forge/plugin-webpack",
           {
             "mainConfig": "./webpack.main.config.js",
@@ -99,7 +100,9 @@
     "@reduxjs/toolkit": "^1.7.2",
     "axios": "^0.26.0",
     "cors": "^2.8.5",
+    "electron-json-settings-store": "^1.0.3",
     "electron-squirrel-startup": "^1.0.0",
+    "electron-store": "^8.0.1",
     "express": "^4.17.3",
     "helmet": "^5.0.2",
     "http-errors": "^2.0.0",
