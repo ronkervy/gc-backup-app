@@ -4,8 +4,15 @@ import {
   Button,
   Grid,
   Box,
-  InputBase
+  InputBase,
+  Typography
 } from '@mui/material';
+import {
+   Settings,
+   Backup as BackupIcon,
+   Storage,
+   Restore
+} from '@mui/icons-material'
 import { motion } from 'framer-motion';
 import { BackupList, CreateBackup } from '../store/backup.services';
 
@@ -18,7 +25,7 @@ function Backup() {
     return(
 	 <Grid 
 	    container 
-	    className="backupPage"
+	    className="backupPage page"
 	 >
 	    <Box
 	       boxShadow={4}
@@ -29,8 +36,11 @@ function Backup() {
 	       animate={{ y: 0, opacity: 1 }}
 	       transition={{ duration: .5 }}
 	       whileHover={{ scale: 1.1, transition: { duration: .5}  }}
+	       whileTap={{ scale: 1 }}
 	    >
-	       QUICK BACKUP
+	       <Typography color="white" variant="h6">Quick Backup</Typography>
+	       <BackupIcon style={{ fontSize: 90 }} color="action" />
+	       <p className="description">Quick backup database,<br /> default backup location <br />is in "C:/backups"</p>
 	    </Box>
 	    <Box
 	       boxShadow={4}
@@ -41,8 +51,11 @@ function Backup() {
 	       animate={{ y: 0, opacity: 1 }}
 	       transition={{ duration: 1 }}
 	       whileHover={{ scale: 1.1, transition: { duration: .5}  }}
+	       whileTap={{ scale: 1 }}
 	    >
-	       RESTORE BACKUP
+	       <Typography color="white" variant="h6">Restore Backup</Typography>
+	       <Restore style={{ fontSize: 90 }} color="action" />
+	       <p className="description">Quick backup database,<br /> default backup location <br />is in "C:/backups"</p>
 	    </Box>
 	    <Box 
 	       boxShadow={4}
@@ -53,8 +66,11 @@ function Backup() {
 	       animate={{ y: 0, opacity: 1 }}
 	       transition={{ duration: 1.5 }}
 	       whileHover={{ scale: 1.1, transition: { duration: .5}  }}
+	       whileTap={{ scale: 1 }}
 	    >
-	       CUSTOM BACKUP
+	       <Typography color="white" variant="h6">Custom Backup</Typography>
+	       <Storage style={{ fontSize: 90 }} color="action" />
+	       <p className="description">Quick backup database,<br /> default backup location <br />is in "C:/backups"</p>
 	    </Box>
 	 </Grid>
     );

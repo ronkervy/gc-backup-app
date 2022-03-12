@@ -6,7 +6,7 @@ import {
 } from '@mui/material';
 import { Routes, Route } from 'react-router-dom';
 
-import BackupList from './components/BackupList';
+import DatabaseList from './components/DatabaseList';
 import SettingsPage from './components/SettingsPage';
 import Backup from './components/Backup';
 import Nav from './shared/Nav';
@@ -17,7 +17,7 @@ function App() {
 	 <Nav />
 	 <Routes>
 	    <Route path="/" element={<Backup />} />
-	    <Route path="/backups/database" element={<BackupList />} />
+	    <Route path="/backups/database" element={<DatabaseList />} />
 	    <Route path="/settings" element={<SettingsPage />} />
 	 </Routes>
       </Grid>
