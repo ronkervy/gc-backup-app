@@ -6,6 +6,7 @@
   "main": ".webpack/main",
   "scripts": {
     "start": "SET NODE_ENV=development && electron-forge start",
+    "start:gulp": "yarn run gulp",
     "start:db": "SET NODE_ENV=development && electron-forge start --inspect-electron",
     "package": "SET NODE_ENV=production && electron-forge package",
     "make": "SET NODE_ENV=production && electron-forge make",
@@ -48,7 +49,6 @@
       "electronRebuildConfig": {},
       "plugins": [
         [
-	  "@electron-forge/plugin-auto-unpack-natives",
           "@electron-forge/plugin-webpack",
           {
             "mainConfig": "./webpack.main.config.js",
@@ -57,7 +57,7 @@
               "config": "./webpack.renderer.config.js",
               "entryPoints": [
                 {
-                  "html": "./src/index.html",
+                  "html": "./src/public/index.html",
                   "js": "./src/renderer.js",
                   "name": "main_window",
                   "preload": {
@@ -89,7 +89,10 @@
     "electron": "17.1.0",
     "electron-devtools-installer": "^3.2.0",
     "electron-rebuild": "^3.2.7",
+    "gulp": "^4.0.2",
+    "gulp-sass": "^5.1.0",
     "node-loader": "^2.0.0",
+    "sass": "^1.49.9",
     "style-loader": "^3.0.0",
     "webpack-node-externals": "^3.0.0"
   },
@@ -104,6 +107,7 @@
     "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^8.0.1",
     "express": "^4.17.3",
+    "framer-motion": "^6.2.8",
     "helmet": "^5.0.2",
     "http-errors": "^2.0.0",
     "mongodb": "^4.4.0",

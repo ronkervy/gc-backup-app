@@ -25,6 +25,6 @@
  *  });
  * ```
  */
-import './index.css'
+import './public/styles/style.css'
 import './app/index.js'
 

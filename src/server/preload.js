@@ -45,7 +45,8 @@ contextBridge.exposeInMainWorld(
       },
 
       CreateBackup: async(data)=>{
-	 try{
+	  console.log(data);
+	  try{
 	    const res = await BackupService({
 		url: "/backups",
 		method: "POST",

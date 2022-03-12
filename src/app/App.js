@@ -4,31 +4,25 @@ import {
   Button,
   InputBase
 } from '@mui/material';
+import { Routes, Route } from 'react-router-dom';
 
+import BackupList from './components/BackupList';
+import SettingsPage from './components/SettingsPage';
 import Backup from './components/Backup';
+import Nav from './shared/Nav';
 
 function App() {
-  
-    const setSchedule = ()=>{
-	window.ConfigAPI.SetSettings({
-	    schedule : "0 9 */7 * *"
-	});
-    }
-
-    useEffect(()=>{
-	  window.ConfigAPI.GetSettings();
-    },[]);
-
-    return(
-      <div className="App">
-	<Backup />
-	<Button
-	  variant="contained"
-	  color="primary"
-	  onClick={setSchedule}
-	>Set Settings</Button>
-      </div> 
-    );
+   return(
+      <Grid container className="App">
+	 <Nav />
+	 <Routes>
+	    <Route path="/" element={<Backup />} />
+	    <Route path="/backups/database" element={<BackupList />} />
+	    <Route path="/settings" element={<SettingsPage />} />
+	 </Routes>
+      </Grid>
+      
+   )
 }
 
 export default App;

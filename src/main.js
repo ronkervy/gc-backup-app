@@ -34,6 +34,9 @@ const createWindow = () => {
     width: 800,
     height: 600,
     show: false,
+    frame: false,
+    transparent: true,
+    resizable: false,
     autoHideMenuBar: true,
     webPreferences: {
 	nodeIntegration: false,
@@ -90,6 +93,8 @@ app.on('activate', () => {
 });
 
 ipcMain.handle('dialog:open', async()=>{
+   const usrProfile = process.env['USERPROFILE'];
+   console.log(usrProfile);
    try{
       const dialogPath = dialog.showOpenDialogSync(mainWindow,{
 	properties: ['openDirectory']
@@ -97,7 +102,8 @@ ipcMain.handle('dialog:open', async()=>{
       console.log(dialogPath); 
       return dialogPath[0];
    }catch(err){
-      return "Please Select a folder";
+      let defaultPath = await store.get('backupPath');
+      return defaultPath;
    }
 });
 

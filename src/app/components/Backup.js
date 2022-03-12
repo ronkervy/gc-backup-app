@@ -3,9 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   Button,
   Grid,
+  Box,
   InputBase
 } from '@mui/material';
-
+import { motion } from 'framer-motion';
 import { BackupList, CreateBackup } from '../store/backup.services';
 
 function Backup() {
@@ -14,46 +15,48 @@ function Backup() {
     const dispatch = useDispatch();
     const { loading } = useSelector(state=>state.backups);
 
-    const selectedPath = async(e)=>{
-	const folderPath = await window.DialogAPI.OpenDialog();
-	setPath(folderPath);
-    }
-
-    const FileList = async()=>{
-	const list = await window.FileAPI.FileList("C:/Users/kervy/Projects/gc-backup-app"); 
-	console.log(list);
-    } 
-
-    useEffect(()=>{
-      FileList();
-      dispatch( BackupList() );
-    },[]);
-
-    if( loading ) return <div>Loading...</div>
-
     return(
-	<div>
-	    <Grid container>
-		<Grid item lg={12}>
-		    <InputBase 
-			placeholder="Browse" 
-			value={path}
-			variant="contained"
-			onClick={selectedPath}
-		    />
-		</Grid>
-		<Grid item lg={12}>
-		    <Button
-		      color="primary"
-		      variant="contained"
-		      onClick={()=>{
-			 if( path === '' ) return;
-			 dispatch( CreateBackup({path}) );
-		      }}
-		    >Backup</Button>
-		</Grid> 
-	    </Grid>
-	</div>
+	 <Grid 
+	    container 
+	    className="backupPage"
+	 >
+	    <Box
+	       boxShadow={4}
+	       component={motion.div} 
+	       md={4} 
+	       className="backupBox"
+	       initial={{ y: -30, opacity: 0 }}
+	       animate={{ y: 0, opacity: 1 }}
+	       transition={{ duration: .5 }}
+	       whileHover={{ scale: 1.1, transition: { duration: .5}  }}
+	    >
+	       QUICK BACKUP
+	    </Box>
+	    <Box
+	       boxShadow={4}
+	       md={4} 
+	       className="backupBox"
+	       component={motion.div}
+	       initial={{ y: -30, opacity: 0 }}
+	       animate={{ y: 0, opacity: 1 }}
+	       transition={{ duration: 1 }}
+	       whileHover={{ scale: 1.1, transition: { duration: .5}  }}
+	    >
+	       RESTORE BACKUP
+	    </Box>
+	    <Box 
+	       boxShadow={4}
+	       md={4} 
+	       className="backupBox"
+	       component={motion.div}  
+	       initial={{ y: -30, opacity: 0 }}
+	       animate={{ y: 0, opacity: 1 }}
+	       transition={{ duration: 1.5 }}
+	       whileHover={{ scale: 1.1, transition: { duration: .5}  }}
+	    >
+	       CUSTOM BACKUP
+	    </Box>
+	 </Grid>
     );
 }
 
