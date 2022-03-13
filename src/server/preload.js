@@ -17,7 +17,9 @@ contextBridge.exposeInMainWorld(
 contextBridge.exposeInMainWorld(
   'DialogAPI',
   {
-    OpenDialog: ()=> ipcRenderer.invoke('dialog:open')
+    OpenDialog: ()=> ipcRenderer.invoke('dialog:open'),
+    CloseBtn: ()=> ipcRenderer.invoke('window:close'),
+    MinimizeBtn: ()=> ipcRenderer.invoke('window:min')
   } 
 );
 
@@ -72,6 +74,3 @@ contextBridge.exposeInMainWorld(
       }
   }
 )
-
-
-

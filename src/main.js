@@ -37,7 +37,7 @@ const createWindow = () => {
     frame: false,
     transparent: true,
     resizable: false,
-    autoHideMenuBar: true,
+    autoHideMenuBar: true,  
     webPreferences: {
 	nodeIntegration: false,
 	contextIsolation: true,
@@ -92,9 +92,9 @@ app.on('activate', () => {
   }
 });
 
+//HANDLE FOR FILE DIALOGS AND WINDOW BUTTON 
 ipcMain.handle('dialog:open', async()=>{
    const usrProfile = process.env['USERPROFILE'];
-   console.log(usrProfile);
    try{
       const dialogPath = dialog.showOpenDialogSync(mainWindow,{
 	properties: ['openDirectory']
@@ -108,8 +108,14 @@ ipcMain.handle('dialog:open', async()=>{
 });
 
 ipcMain.handle('file:list', async(e,fPath)=>{
-    console.log("Main : ",fPath);
-    //return await shell.showItemInFolder(path.join(app.getAppPath(),'./'));
+});
+
+ipcMain.handle('window:close',()=>{
+   app.quit();
+});
+
+ipcMain.handle('window:min',()=>{
+   mainWindow.minimize();
 });
 
 //HANDLES FOR SETTINGS

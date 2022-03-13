@@ -26,6 +26,7 @@ button, input, form, a, a:visited {
 .App {
   display: flex;
   justify-content: center;
+  align-items: flex-start;
   -webkit-app-region: drag;
   background: #2c55bd;
   background: radial-gradient(circle, #2c55bd 0%, #13266f 100%);
@@ -33,10 +34,29 @@ button, input, form, a, a:visited {
   height: 100%;
   border-radius: 8px;
 }
+.App .dbstatus-wrap {
+  height: 140px;
+  border-radius: 8px;
+  width: 550px;
+  border: 1px solid #1E3A90;
+  color: white;
+  padding: 10px;
+}
+.App .topBtnWrap {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  padding: 5px 8px;
+}
+.App .topBtnWrap .topBtn {
+  cursor: pointer;
+  -webkit-app-region: no-drag;
+  font-size: 15px;
+  margin-right: 5px;
+}
 .App .mainWrap {
   display: flex;
   justify-content: center;
-  align-items: center;
 }
 .App .mainWrap .mainnav {
   display: flex;
@@ -44,7 +64,7 @@ button, input, form, a, a:visited {
   width: 400px;
   border-bottom: 2px solid #1E3A90;
   height: 40px;
-  margin: 80px 0px 0px 0px !important;
+  margin: 0px 0px 0px 0px !important;
   padding: 0px;
 }
 .App .mainWrap .mainnav li {
@@ -63,6 +83,7 @@ button, input, form, a, a:visited {
   background: #142757;
 }
 .App .mainWrap .mainnav .navItems:hover {
+  border-radius: 5px;
   background: #142757;
   border-radius: 5px;
 }
@@ -80,12 +101,16 @@ button, input, form, a, a:visited {
   border-radius: 8px;
   -webkit-app-region: no-drag;
   width: 190px;
-  height: 280px;
+  height: 230px;
   background: #2c55bd;
   margin: 8px;
   cursor: pointer;
+  transition: background 500ms ease-in-out;
 }
 .App .backupPage .backupBox .description {
   color: white;
   font-size: 0.6rem;
+}
+.App .backupPage .backupBox:hover {
+  background: #4F6DBB;
 }

@@ -27,6 +27,7 @@ button,input,form,a,a:visited{
 .App{
   display: flex;
   justify-content: center;
+  align-items: flex-start;
   -webkit-app-region: drag;
   background: rgb(44,85,189);
   background: radial-gradient(circle, rgba(44,85,189,1) 0%, rgba(19,38,111,1) 100%);
@@ -36,10 +37,29 @@ button,input,form,a,a:visited{
   .page{
 
   }
+  .dbstatus-wrap{
+      height: 140px;
+      border-radius: 8px;
+      width: 550px;
+      border: 1px solid #1E3A90;
+      color: white;
+      padding: 10px;
+  }
+  .topBtnWrap{
+      display: flex;
+      justify-content: flex-end;
+      width: 100%;
+      padding: 5px 8px;
+      .topBtn{
+	 cursor: pointer;
+	 -webkit-app-region: no-drag;
+	 font-size: 15px;
+	 margin-right: 5px;
+      }
+   }
   .mainWrap{
      display: flex;
      justify-content: center;
-     align-items: center;
      .mainnav{
 	 display: flex;
 	 list-style-type: none;
@@ -50,7 +70,7 @@ button,input,form,a,a:visited{
 	    margin: 0 0 20px 10px;
 	 }
 	 height: 40px;
-	 margin: 80px 0px 0px 0px !important;
+	 margin: 0px 0px 0px 0px !important;
 	 padding: 0px;
 	 .navItems{
 	    text-decoration: none;
@@ -63,6 +83,7 @@ button,input,form,a,a:visited{
 	       background: #142757; 
 	    }
 	    &:hover{
+	       border-radius: 5px;
 	       background: #142757;
 	       border-radius: 5px;
 	    }
@@ -82,13 +103,17 @@ button,input,form,a,a:visited{
 	 border-radius: 8px;
 	 -webkit-app-region: no-drag;
 	 width: 190px;
-	 height: 280px;
+	 height: 230px;
 	 background: #2c55bd;
 	 margin: 8px;
 	 cursor: pointer;
 	 .description{
 	    color: white;
 	    font-size: .6rem;
+	 }
+	 transition: background 500ms ease-in-out;
+	 &:hover{
+	    background: #4F6DBB;
 	 }
      }
   }
