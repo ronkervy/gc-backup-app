@@ -55,7 +55,7 @@ function Backup() {
 	    >
 	       <Typography color="white" variant="h6">Restore Backup</Typography>
 	       <Restore style={{ fontSize: 90 }} color="action" />
-	       <p className="description">Quick backup database,<br /> default backup location <br />is in "C:/backups"</p>
+	       <p className="description">Select from recent backups <br />and restore database <br />to its normal state.</p>
 	    </Box>
 	    <Box 
 	       boxShadow={4}
@@ -70,7 +70,7 @@ function Backup() {
 	    >
 	       <Typography color="white" variant="h6">Custom Backup</Typography>
 	       <Storage style={{ fontSize: 90 }} color="action" />
-	       <p className="description">Quick backup database,<br /> default backup location <br />is in "C:/backups"</p>
+	       <p className="description">Customize backups <br />to a specified <br />backup folder</p>
 	    </Box>
 	 </Grid>
     );

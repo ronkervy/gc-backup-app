@@ -25,7 +25,6 @@ module.exports = {
 	    })
 	  ).then(collections=>{
 	      const { totalSize,totalSizeMb } = resultDB;
-	      console.log(totalSizeMb);
 	      res.status(200).json({
 		  databases: dbNames,
 		  dbCount: dbNames.length,
@@ -33,9 +32,6 @@ module.exports = {
 		  ...collections
 	      });
 	  });
-
-	  	  
-
 	}catch(err){
 	    return next(createHttpError.Unauthorized({
 		error: err.message

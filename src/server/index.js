@@ -12,6 +12,8 @@ const whitelist = [
   'http://127.0.0.1:3000/main_window'
 ];
 
+process.env["NODE_CONFIG_DIR"] = __dirname + "/configDir/";
+
 const opt = {
   origin : (origin,cb)=>{
     if(whitelist.indexOf(origin) !== -1 || !origin){
@@ -46,4 +48,4 @@ app.use((err,req,res,next)=>{
     });
 });
 
-app.listen(8081);
+app.listen(8083);

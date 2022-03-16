@@ -37,13 +37,53 @@ button,input,form,a,a:visited{
   .page{
 
   }
+  .spinner{
+      content: "";
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      position: fixed;
+      z-index: 10;
+      background: hsl(200,20%,70%);
+      &:before{
+	 display: block;
+	 content: "";   
+	 border-top: 1px solid #000;
+      }
+      &:after{
+	 display: block;
+	 content: "";
+	 border-bottom: 1px solid #000;
+      }
+  }
   .dbstatus-wrap{
+      display: flex;
+      justify-content: center;
+      align-items : center;
       height: 140px;
       border-radius: 8px;
       width: 550px;
       border: 1px solid #1E3A90;
       color: white;
       padding: 10px;
+      -webkit-app-region: no-drag;
+      .content-stat-wrap{
+	 display: flex;
+	 border-right: 2px solid #1E3A90;
+	 transition: all 500ms ease-in-out;
+	 &:last-child{
+	    border-right: none;
+	 }
+	 justify-content: center;
+	 .statCount{
+	    font-size: 30px;
+	 }
+	 .statDesc{
+	    font-size: 12px;
+	    padding: 5px 10px;
+	 }
+      } 
   }
   .topBtnWrap{
       display: flex;

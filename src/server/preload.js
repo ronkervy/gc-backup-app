@@ -4,7 +4,7 @@ const axios = require('axios');
 const { ipcRenderer } = require('electron');
 
 const BackupService = axios.create({
-    baseURL: "http://localhost:8081/api/v1"
+    baseURL: "http://localhost:8083/api/v1"
 });
 
 contextBridge.exposeInMainWorld(
@@ -32,8 +32,20 @@ contextBridge.exposeInMainWorld(
 );
 
 contextBridge.exposeInMainWorld(
-  'APIV1', 
+  'GCAPIv1', 
   {
+      DbList: async()=>{
+	 try{
+	    const res = await BackupService({
+	       url: '/list/database',
+	       method: 'GET'
+	    });
+	    return res.data;
+	 }catch(err){
+	    return err.response;
+	 }
+      },
+
       BackupList: async()=>{
 	 try{
 	    const res = await BackupService({
@@ -42,7 +54,7 @@ contextBridge.exposeInMainWorld(
 	    });
 	    return res.data;
 	 }catch(err){
-	    return err.response.data;
+	    return err.response;
 	 } 
       },
 
@@ -56,7 +68,7 @@ contextBridge.exposeInMainWorld(
 	    });
 	    return res.data;
 	 }catch(err){
-	    return err.response.data;
+	    return err.response;
 	 }
       },
 
@@ -69,7 +81,7 @@ contextBridge.exposeInMainWorld(
 	      });
 	      return res.data;
 	  }catch(err){
-	      return err.response.data;
+	      return err.response;
 	  }
       }
   }

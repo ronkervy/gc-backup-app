@@ -34,13 +34,53 @@ button, input, form, a, a:visited {
   height: 100%;
   border-radius: 8px;
 }
+.App .spinner {
+  content: "";
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: fixed;
+  z-index: 10;
+  background: #a3b8c2;
+}
+.App .spinner:before {
+  display: block;
+  content: "";
+  border-top: 1px solid #000;
+}
+.App .spinner:after {
+  display: block;
+  content: "";
+  border-bottom: 1px solid #000;
+}
 .App .dbstatus-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 140px;
   border-radius: 8px;
   width: 550px;
   border: 1px solid #1E3A90;
   color: white;
   padding: 10px;
+  -webkit-app-region: no-drag;
+}
+.App .dbstatus-wrap .content-stat-wrap {
+  display: flex;
+  border-right: 2px solid #1E3A90;
+  transition: all 500ms ease-in-out;
+  justify-content: center;
+}
+.App .dbstatus-wrap .content-stat-wrap:last-child {
+  border-right: none;
+}
+.App .dbstatus-wrap .content-stat-wrap .statCount {
+  font-size: 30px;
+}
+.App .dbstatus-wrap .content-stat-wrap .statDesc {
+  font-size: 12px;
+  padding: 5px 10px;
 }
 .App .topBtnWrap {
   display: flex;
