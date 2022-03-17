@@ -3,7 +3,7 @@ import React from 'react';
 
 function SplashScreen() {
    return(
-      <Grid container className="page"></Grid>
+      <Grid container className=""></Grid>
    );
 }
 

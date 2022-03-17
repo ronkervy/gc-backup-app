@@ -7,13 +7,13 @@ import {
 import { useDispatch,useSelector } from 'react-redux';
 import { Routes, Route } from 'react-router-dom';
 import NavTop from './shared/NavTop';
-import DatabaseList from './components/DatabaseList';
+import DatabaseList from './components/database/DatabaseList';
 import SettingsPage from './components/SettingsPage';
-import Backup from './components/Backup';
+import Backup from './components/backup/Backup';
 import Nav from './shared/Nav';
-import DbStatus from './components/DbStatus';
+import DbStatus from './components/database/DbStatus';
 import Loader from './shared/Loader';
-import { DatabaseList as DbList } from './store/backup.services';
+import { DbList } from './store/backup.services';
 
 function App() {
 
@@ -41,11 +41,13 @@ function App() {
 	 <NavTop />
 	 <Nav />
 	 <DbStatus stats={stats} />
-	 <Routes>
-	    <Route path="/" element={<Backup />} />
-	    <Route path="/backups/database" element={<DatabaseList />} />
-	    <Route path="/settings" element={<SettingsPage />} />
-	 </Routes>
+	 <Grid className="content page" item container md={12} sm={12}>
+	    <Routes>
+	       <Route path="/" element={<Backup />} />
+	       <Route path="/backups/database" element={<DatabaseList />} />
+	       <Route path="/settings" element={<SettingsPage />} />
+	    </Routes>
+	 </Grid> 
       </Grid>
       
    )

@@ -14,7 +14,7 @@ import {
    Restore
 } from '@mui/icons-material'
 import { motion } from 'framer-motion';
-import { BackupList, CreateBackup } from '../store/backup.services';
+import { BackupList, CreateBackup } from '../../store/backup.services';
 
 function Backup() {
     
@@ -25,7 +25,7 @@ function Backup() {
     return(
 	 <Grid 
 	    container 
-	    className="backupPage page"
+	    className="backupPage"
 	 >
 	    <Box
 	       boxShadow={4}
@@ -33,8 +33,7 @@ function Backup() {
 	       md={4} 
 	       className="backupBox"
 	       initial={{ y: -30, opacity: 0 }}
-	       animate={{ y: 0, opacity: 1 }}
-	       transition={{ duration: .5 }}
+	       animate={{ y: 0, opacity: 1, transition: { duration: .5 } }}
 	       whileHover={{ scale: 1.1, transition: { duration: .5}  }}
 	       whileTap={{ scale: 1 }}
 	    >
@@ -48,8 +47,7 @@ function Backup() {
 	       className="backupBox"
 	       component={motion.div}
 	       initial={{ y: -30, opacity: 0 }}
-	       animate={{ y: 0, opacity: 1 }}
-	       transition={{ duration: 1 }}
+	       animate={{ y: 0, opacity: 1, transition: { duration: 1 } }}
 	       whileHover={{ scale: 1.1, transition: { duration: .5}  }}
 	       whileTap={{ scale: 1 }}
 	    >
@@ -63,8 +61,7 @@ function Backup() {
 	       className="backupBox"
 	       component={motion.div}  
 	       initial={{ y: -30, opacity: 0 }}
-	       animate={{ y: 0, opacity: 1 }}
-	       transition={{ duration: 1.5 }}
+	       animate={{ y: 0, opacity: 1, transition: { duration: 1.5 }  }}
 	       whileHover={{ scale: 1.1, transition: { duration: .5}  }}
 	       whileTap={{ scale: 1 }}
 	    >

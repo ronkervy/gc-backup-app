@@ -4,7 +4,7 @@ import { Grid } from '@mui/material';
 
 function Nav() {
       return(
-	 <Grid item lg={12} sm={12} className="mainWrap">
+	 <Grid item lg={12} sm={12} className="navWrap">
 	    <ul className="mainnav">
 	       <li>
 		  <NavLink to="/" className="navItems">Backup Options</NavLink>

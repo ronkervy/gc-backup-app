@@ -9,7 +9,7 @@ function DbStatus(props) {
    const { stats } = props;
 
    React.useEffect(()=>{
-      console.log(stats);
+
    },[])
 
    return(

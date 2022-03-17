@@ -22,8 +22,8 @@ export const BackupList = createAsyncThunk(
   }
 );
 
-export const DatabaseList = createAsyncThunk(
-   'backup/DatabaseList',
+export const DbList = createAsyncThunk(
+   'backup/DbList',
    async(args,{ rejectWithValue })=>{
       try{
 	 const res = await window.GCAPIv1.DbList();

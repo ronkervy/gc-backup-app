@@ -15,21 +15,21 @@ module.exports = {
 	  const dbCollections = [];
   
 	  resultDB["databases"].map( async(db,i)=>{
-	      dbNames.push(db.name);
+	      dbNames.push({name: db.name,sizeOfDb: db.sizeOnDisk / 1048576});
 	  });
 
 	  Promise.all(
-	    dbNames.map(async(name,i)=>{
-	      const resColl = await con.db(name).listCollections().toArray();
-	      return {...resColl,dbName: name};
+	    dbNames.map(async(db,i)=>{
+	      const resColl = await con.db(db.name).listCollections().toArray();
+	      return {...resColl,dbName: db.name};
 	    })
 	  ).then(collections=>{
 	      const { totalSize,totalSizeMb } = resultDB;
 	      res.status(200).json({
+		  ...collections,
 		  databases: dbNames,
 		  dbCount: dbNames.length,
 		  sizeOfDb: totalSizeMb + ' MB',
-		  ...collections
 	      });
 	  });
 	}catch(err){
