@@ -8,13 +8,6 @@ const BackupService = axios.create({
 });
 
 contextBridge.exposeInMainWorld(
-  'FileAPI',
-  {
-    FileList: (fPath)=> ipcRenderer.invoke('file:list',{ fPath })  
-  }
-);
-
-contextBridge.exposeInMainWorld(
   'DialogAPI',
   {
     OpenDialog: ()=> ipcRenderer.invoke('dialog:open'),
@@ -46,7 +39,7 @@ contextBridge.exposeInMainWorld(
 	 }
       },
 
-      BackupList: async()=>{
+      BackupList: async(fpath)=>{
 	 try{
 	    const res = await BackupService({
 		url: '/backups',
@@ -59,7 +52,6 @@ contextBridge.exposeInMainWorld(
       },
 
       CreateBackup: async(data)=>{
-	  console.log(data);
 	  try{
 	    const res = await BackupService({
 		url: "/backups",

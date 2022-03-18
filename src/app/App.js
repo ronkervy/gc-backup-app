@@ -14,10 +14,12 @@ import Nav from './shared/Nav';
 import DbStatus from './components/database/DbStatus';
 import Loader from './shared/Loader';
 import { DbList } from './store/backup.services';
+import { GetSettings } from './store/settings.services';
 
 function App() {
 
    const [stats,setStats] = useState([]);
+   const [settings,setSettings] = useState([]);
    const dispatch = useDispatch();
    const { entities,loading } = useSelector(state=>state.backups);
    
@@ -28,8 +30,16 @@ function App() {
       }
    }
 
+   const initSettings = async()=>{
+      const res = await dispatch(GetSettings());
+      if( GetSettings.fulfilled.match(res) ){
+	 setSettings(res.payload);
+      }
+   }
+
    useEffect(()=>{
       getList();
+      initSettings();
    },[]);
 
    if( loading || stats.length === 0 ){

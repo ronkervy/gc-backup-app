@@ -47,7 +47,7 @@ module.exports = {
 	 let dirPath = fpath !== '' ? fpath : path.join(__dirname,'../../backups')
 	 let files = [];
 	 try{
-	    const fh = await opendir('C://backups');
+	    const fh = await opendir(dirPath);
 	    for await (const dirent of fh){
 	       files.push({ isDirectory: dirent.isDirectory(),file_name: dirent.name });
 	    }

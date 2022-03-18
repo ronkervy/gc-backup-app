@@ -107,9 +107,6 @@ ipcMain.handle('dialog:open', async()=>{
    }
 });
 
-ipcMain.handle('file:list', async(e,fPath)=>{
-});
-
 ipcMain.handle('window:close',()=>{
    app.quit();
 });
@@ -120,7 +117,8 @@ ipcMain.handle('window:min',()=>{
 
 //HANDLES FOR SETTINGS
 ipcMain.handle('config:get', async()=>{
-    console.log(await store.getAll);
+    const settings = await store.getAll;
+    return settings;
 });
 
 ipcMain.handle('config:set', async(e,args)=>{
