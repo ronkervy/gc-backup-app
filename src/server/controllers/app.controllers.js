@@ -4,7 +4,9 @@ const createHttpError = require('http-errors');
 const path = require('path');
 const { mongoConnect } = require('../../config/db.config');
 const cron = require('node-cron');
+const { opendir,open } = require('fs/promises');
 
+ 
 module.exports = {
 
     ListDatabases: async(req,res,next)=>{
@@ -40,9 +42,23 @@ module.exports = {
     },
     
     ListBackups: async(req,res,next)=>{
-	res.status(200).json({
-	  backups : "List of backups"
-	});
+	 console.log('TEST');
+	 const { path: fpath } = req.body;
+	 let dirPath = fpath !== '' ? fpath : path.join(__dirname,'../../backups')
+	 let files = [];
+	 try{
+	    const fh = await opendir('C://backups');
+	    for await (const dirent of fh){
+	       files.push({ isDirectory: dirent.isDirectory(),file_name: dirent.name });
+	    }
+	    return res.status(200).json({
+	       files
+	    });
+	 }catch(err){
+	    return next(createHttpError.InternalServerError({
+	       error: err
+	    }));
+	 }
     },
     
     CreateBackup: async(req,res,next)=>{
