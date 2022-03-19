@@ -36,6 +36,7 @@ function Backup() {
 	       animate={{ y: 0, opacity: 1, transition: { duration: .5 } }}
 	       whileHover={{ scale: 1.1, transition: { duration: .5}  }}
 	       whileTap={{ scale: 1 }}
+	       onClick={()=>console.log("Quick Backup")}
 	    >
 	       <Typography color="white" variant="h6">Quick Backup</Typography>
 	       <BackupIcon style={{ fontSize: 90 }} color="action" />
@@ -50,6 +51,7 @@ function Backup() {
 	       animate={{ y: 0, opacity: 1, transition: { duration: 1 } }}
 	       whileHover={{ scale: 1.1, transition: { duration: .5}  }}
 	       whileTap={{ scale: 1 }}
+	       onClick={()=>console.log("Restore Backup")}
 	    >
 	       <Typography color="white" variant="h6">Restore Backup</Typography>
 	       <Restore style={{ fontSize: 90 }} color="action" />
@@ -64,6 +66,7 @@ function Backup() {
 	       animate={{ y: 0, opacity: 1, transition: { duration: 1.5 }  }}
 	       whileHover={{ scale: 1.1, transition: { duration: .5}  }}
 	       whileTap={{ scale: 1 }}
+	       onClick={()=>console.log('Custom Backup')}
 	    >
 	       <Typography color="white" variant="h6">Custom Backup</Typography>
 	       <Storage style={{ fontSize: 90 }} color="action" />

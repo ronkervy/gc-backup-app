@@ -13,7 +13,8 @@ import Backup from './components/backup/Backup';
 import Nav from './shared/Nav';
 import DbStatus from './components/database/DbStatus';
 import Loader from './shared/Loader';
-import { DbList } from './store/backup.services';
+import { DbList } from './store/db.services';
+import { BackupList } from './store/backup.services'
 import { GetSettings } from './store/settings.services';
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
    const [settings,setSettings] = useState([]);
    const dispatch = useDispatch();
    const { entities,loading } = useSelector(state=>state.backups);
+   const { entities: config,loading: settingsLoading } = useSelector(state=>state.settings);
    
    const getList = async()=>{
       const res = await dispatch(DbList());
@@ -34,6 +36,7 @@ function App() {
       const res = await dispatch(GetSettings());
       if( GetSettings.fulfilled.match(res) ){
 	 setSettings(res.payload);
+	 await dispatch(BackupList(res.payload.backupPath));
       }
    }
 

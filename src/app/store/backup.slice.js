@@ -21,18 +21,7 @@ const BackupSlice = createSlice({
 	  state.loading = false;
 	  state.error = payload;
       })
-      //DATABASE LIST
-      .addCase(DbList.pending, state=>{
-	  state.loading = true;
-      })
-      .addCase(DbList.fulfilled,(state,{ payload })=>{
-	  state.loading = false;
-	  state.entities = payload;
-      })
-      .addCase(DbList.rejected,(state,{ payload })=>{
-	  state.loading = false;
-	  state.error = payload;
-      })
+      
       //CREATE BACKUP
       .addCase(CreateBackup.pending, state=>{
 	  state.loading = true;

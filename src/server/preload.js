@@ -43,7 +43,8 @@ contextBridge.exposeInMainWorld(
 	 try{
 	    const res = await BackupService({
 		url: '/backups',
-		method: 'GET' 
+		method: 'GET',
+	        params: { file_path: fpath }
 	    });
 	    return res.data;
 	 }catch(err){

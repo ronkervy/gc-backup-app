@@ -17,7 +17,7 @@ module.exports = {
 	  const dbCollections = [];
   
 	  resultDB["databases"].map( async(db,i)=>{
-	      dbNames.push({name: db.name,sizeOfDb: db.sizeOnDisk / 1048576});
+	      dbNames.push({id: i,name: db.name,sizeOfDb: db.sizeOnDisk / 1048576});
 	  });
 
 	  Promise.all(
@@ -42,12 +42,12 @@ module.exports = {
     },
     
     ListBackups: async(req,res,next)=>{
-	 console.log('TEST');
-	 const { path: fpath } = req.body;
-	 let dirPath = fpath !== '' ? fpath : path.join(__dirname,'../../backups')
+	 const { file_path: fpath } = req.query;
+	 let fh = null;
+	 let dirPath = fpath !== undefined ? fpath : path.join(__dirname,'../../backups')
 	 let files = [];
 	 try{
-	    const fh = await opendir(dirPath);
+	    fh = await opendir(dirPath);
 	    for await (const dirent of fh){
 	       files.push({ isDirectory: dirent.isDirectory(),file_name: dirent.name });
 	    }

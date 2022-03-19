@@ -16,8 +16,14 @@ if (require('electron-squirrel-startup')) {
 const { ElectronJSONSettingsStoreMain } = require('electron-json-settings-store');
 
 const schema = {
-    schedule : { type: 'string', default: '0 9 */7 * *' },
-    backupPath: { type: 'string', default: 'C:/backups' }
+   scheduleFormat: { type: 'array', items: { type: "object" }, default: [
+      {
+	 weekly : "0 9 */7 * *",
+	 monthly: "0 0 */30 * *"
+      }
+   ]},
+   schedule : { type: 'string', default: '0 9 */7 * *' },
+   backupPath: { type: 'string', default: 'C:/backups' }
 }
 
 const store = new ElectronJSONSettingsStoreMain(schema,{ writeBeforeQuit: true });

@@ -11,7 +11,6 @@ function DbItems(props) {
    const { items } = props;
    
    React.useEffect(()=>{
-      console.log(items);
    },[]);
 
    return(
@@ -22,7 +21,7 @@ function DbItems(props) {
 		  component={motion.div}
 		  boxShadow={3} 
 		  className="dbitems" 
-		  key={dbname} 
+		  key={i} 
 		  item 
 		  md={12} 
 		  sm={12}
