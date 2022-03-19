@@ -18,8 +18,13 @@ const { ElectronJSONSettingsStoreMain } = require('electron-json-settings-store'
 const schema = {
    scheduleFormat: { type: 'array', items: { type: "object" }, default: [
       {
-	 weekly : "0 9 */7 * *",
-	 monthly: "0 0 */30 * *"
+	 weekly : "0 9 */7 * *"
+      },
+      {
+	 monthly: "0 9 */30 * *"
+      },
+      {
+	 once_a_day: "0 9 * * *"
       }
    ]},
    schedule : { type: 'string', default: '0 9 */7 * *' },
