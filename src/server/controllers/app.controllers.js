@@ -4,7 +4,8 @@ const createHttpError = require('http-errors');
 const path = require('path');
 const { mongoConnect } = require('../../config/db.config');
 const cron = require('node-cron');
-const { opendir,open } = require('fs/promises');
+const { opendir,open,stat,access } = require('fs/promises');
+const { constants } = require('fs');
 
  
 module.exports = {
@@ -49,15 +50,26 @@ module.exports = {
 	 try{
 	    fh = await opendir(dirPath);
 	    for await (const dirent of fh){
-	       files.push({ isDirectory: dirent.isDirectory(),file_name: dirent.name });
+	       console.log(await access(dirPath,constants.R_OK|constants.W_OK));
+	       let stats = null; 
+	       if(!dirent.isDirectory()){
+		  stats = await stat(`${dirPath}/${dirent.name}`);
+	       }
+	       files.push(
+		  { 
+		     isDirectory: dirent.isDirectory(),
+		     file_name: dirent.name,stats 
+		  }
+	       );
 	    }
 	    return res.status(200).json({
 	       files
 	    });
 	 }catch(err){
-	    return next(createHttpError.InternalServerError({
-	       error: err
-	    }));
+	    return res.status(200).json({
+	       files,
+	       err
+	    });
 	 }
     },
     

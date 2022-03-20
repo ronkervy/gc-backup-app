@@ -36,6 +36,7 @@ function App() {
       const res = await dispatch(GetSettings());
       if( GetSettings.fulfilled.match(res) ){
 	 setSettings(res.payload);
+	 await ConfigAPI.CronJob(res.payload.schedule);
 	 await dispatch(BackupList(res.payload.backupPath));
       }
    }

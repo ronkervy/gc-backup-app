@@ -20,7 +20,8 @@ contextBridge.exposeInMainWorld(
   'ConfigAPI',
   {
     GetSettings: ()=> ipcRenderer.invoke('config:get'),
-    SetSettings: (args)=> ipcRenderer.invoke('config:set',args)
+    SetSettings: (args)=> ipcRenderer.invoke('config:set',args),
+    CronJob: (args)=> ipcRenderer.invoke('config:cron',args)
   }
 );
 
