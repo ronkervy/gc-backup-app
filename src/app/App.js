@@ -24,6 +24,7 @@ function App() {
    const dispatch = useDispatch();
    const { entities,loading } = useSelector(state=>state.backups);
    const { entities: config,loading: settingsLoading } = useSelector(state=>state.settings);
+   const { loading: dbaseLoading } = useSelector(state=>state.dbase);
    
    const getList = async()=>{
       const res = await dispatch(DbList());
@@ -37,7 +38,7 @@ function App() {
       if( GetSettings.fulfilled.match(res) ){
 	 setSettings(res.payload);
 	 await ConfigAPI.CronJob(res.payload.schedule);
-	 await dispatch(BackupList(res.payload.backupPath));
+	 dispatch(BackupList(res.payload.backupPath));
       }
    }
 
@@ -45,10 +46,6 @@ function App() {
       getList();
       initSettings();
    },[]);
-
-   if( loading || stats.length === 0 ){
-      return <div>loading...</div>
-   }
 
    return(
       <Grid container className="App">

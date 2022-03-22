@@ -36,7 +36,7 @@ contextBridge.exposeInMainWorld(
 	    });
 	    return res.data;
 	 }catch(err){
-	    return err.response;
+	    return err.response.data;
 	 }
       },
 
@@ -49,7 +49,7 @@ contextBridge.exposeInMainWorld(
 	    });
 	    return res.data;
 	 }catch(err){
-	    return err.response;
+	    return err.response.data;
 	 } 
       },
 
@@ -62,7 +62,7 @@ contextBridge.exposeInMainWorld(
 	    });
 	    return res.data;
 	 }catch(err){
-	    return err.response;
+	    return err.response.data;
 	 }
       },
 
@@ -75,7 +75,7 @@ contextBridge.exposeInMainWorld(
 	      });
 	      return res.data;
 	  }catch(err){
-	      return err.response;
+	      return err.response.data;
 	  }
       }
   }

@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import {
-   GetSettings
+   GetSettings,
+   SetSettings
 } from './settings.services';
 
 const initialState = {
@@ -13,6 +14,7 @@ const SettingsSlice = createSlice({
    name: 'settings',
    initialState,
    extraReducers: builder=>{
+      //GET SETTINGS
       builder.addCase(GetSettings.pending,state=>{
 	 state.loading = true;
       })
@@ -21,6 +23,18 @@ const SettingsSlice = createSlice({
 	 state.entities = payload;
       })
       .addCase(GetSettings.rejected,(state,{ payload })=>{
+	 state.loading = false;
+	 state.error = payload;
+      })
+      //SET SETTINGS
+      .addCase(SetSettings.pending,state=>{
+	 state.loading = true;
+      })
+      .addCase(SetSettings.fulfilled,(state,{ payload })=>{
+	 state.loading = false;
+	 state.entities = payload;
+      })
+      .addCase(SetSettings.rejected,(state,{ payload })=>{
 	 state.loading = false;
 	 state.error = payload;
       })

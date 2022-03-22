@@ -15,12 +15,19 @@ import {
 } from '@mui/icons-material'
 import { motion } from 'framer-motion';
 import { BackupList, CreateBackup } from '../../store/backup.services';
+import Loader from '../../shared/Loader';
 
 function Backup() {
     
     const [path,setPath] = useState('');
     const dispatch = useDispatch();
     const { loading } = useSelector(state=>state.backups);
+
+    if( loading ){
+       return(
+	  <Loader />
+       )
+    }
 
     return(
 	 <Grid 

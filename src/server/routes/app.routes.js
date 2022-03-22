@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const {
     CreateBackup,
-    ListBackups,
+    BackupList,
     WeeklyBackup,
     MonthlyBackup,
     DeleteBackup,
@@ -10,7 +10,7 @@ const {
 } = require('../controllers/app.controllers');
 
 //BACKUPS
-router.get('/backups',ListBackups);
+router.get('/backups',BackupList);
 router.post('/backups',CreateBackup);
 router.post('/backups/restore',RestoreBackup);
 

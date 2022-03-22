@@ -128,25 +128,45 @@ button,input,form,a,a:visited{
 	 }
       } 
   }
-  .spinner{
+  .spinner-wrap{
       content: "";
+      display:flex;
+      justify-content: center;
       top: 0;
       left: 0;
       bottom: 0;
       right: 0;
-      position: fixed;
       z-index: 10;
-      background: hsl(200,20%,70%);
-      &:before{
-	 display: block;
-	 content: "";   
-	 border-top: 1px solid #000;
-      }
-      &:after{
-	 display: block;
-	 content: "";
-	 border-bottom: 1px solid #000;
-      }
+      position: fixed;
+      background: radial-gradient(circle, rgba(44,85,189,1) 0%, rgba(19,38,111,1) 100%);
+      .spinner{
+	 &:before{
+	    display: block;
+	    content: "";   
+	    border-top: 2px solid #1E3A90;
+	    height: 50px;
+	    width: 50px;
+	    top: 45%;
+	    left:45%;
+	    position: fixed;
+	    transform: translate(-45%,-45%);
+	    border-radius: 50%;
+	    animation: spin 500ms linear infinite;
+	 }
+	 &:after{
+	    display: block;
+	    content: "";
+	    border-bottom: 2px solid #1E3A90;
+	    height: 50px;
+	    width: 50px;
+	    top: 45%;
+	    left:45%;
+	    position: fixed;
+	    transform: translate(-45%,-45%);
+	    border-radius: 50%;
+	    animation: spin 500ms linear infinite;
+	 }
+      } 
   }
   .page{
       display:flex;
@@ -207,6 +227,12 @@ button,input,form,a,a:visited{
 	 justify-content:flex-start;
 	 width: 550px;
 	 height: 300px;
+	 padding: 10px;
       }
   }
+}
+
+@keyframes spin{
+   0%{ transform:rotate(0deg) }
+   100%{ transform:rotate(360deg) }
 }

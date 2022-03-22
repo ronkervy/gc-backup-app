@@ -4,7 +4,7 @@ const createHttpError = require('http-errors');
 const path = require('path');
 const { mongoConnect } = require('../../config/db.config');
 const cron = require('node-cron');
-const { opendir,open,stat,access } = require('fs/promises');
+const { opendir,open,stat,access,readdir,lstat } = require('fs/promises');
 const { constants } = require('fs');
 
  
@@ -42,26 +42,24 @@ module.exports = {
 	}
     },
     
-    ListBackups: async(req,res,next)=>{
+    BackupList: async(req,res,next)=>{ 
 	 const { file_path: fpath } = req.query;
 	 let fh = null;
 	 let dirPath = fpath !== undefined ? fpath : path.join(__dirname,'../../backups')
+	 const folder_files = await readdir(dirPath);
 	 let files = [];
+	 console.log(dirPath);
 	 try{
-	    fh = await opendir(dirPath);
-	    for await (const dirent of fh){
-	       console.log(await access(dirPath,constants.R_OK|constants.W_OK));
-	       let stats = null; 
-	       if(!dirent.isDirectory()){
-		  stats = await stat(`${dirPath}/${dirent.name}`);
-	       }
-	       files.push(
-		  { 
-		     isDirectory: dirent.isDirectory(),
-		     file_name: dirent.name,stats 
-		  }
-	       );
-	    }
+	    
+	    for (let file of folder_files){
+	       let stats = await lstat(`${dirPath}/${file}`);
+	       files.push({
+		  isDirectory: !stats.isFile(),
+		  file_name: file,
+		  stats
+	       });
+	    };
+
 	    return res.status(200).json({
 	       files
 	    });

@@ -9,17 +9,22 @@ import {
    TableHead,
    TableBody,
    TableCell,
-   TableRow
+   TableRow,
+   InputAdornment
 } from '@mui/material';
+import { Eject } from '@mui/icons-material';
 import { GetSettings,SetSettings } from '../store/settings.services';
 import { useSelector,useDispatch } from 'react-redux';
 import { BackupList } from '../store/backup.services';
+import { motion } from 'framer-motion';
+import Loader from '../shared/Loader';
 
 function SettingsPage() {
 
    const dispatch = useDispatch();
-   const { entities: backups } = useSelector(state=>state.backups);
+   const { entities: backups, loading: backupLoading } = useSelector(state=>state.backups);
    const { entities: settings,loading } = useSelector(state=>state.settings);
+   
    const [sched,setSched] = React.useState('');
    const [dir,setDir] = React.useState('');
    const [files,setFiles] = React.useState([]);
@@ -28,18 +33,40 @@ function SettingsPage() {
       setSched(e.target.value);
    }
 
+   const handleSaveSettings = async()=>{
+      const res = await dispatch(SetSettings({
+	 ...settings,
+	 schedule: sched,
+	 backupPath: dir
+      }));
+
+      if( SetSettings.fulfilled.match(res) ){
+	 dispatch(GetSettings());
+	 dispatch(BackupList(res.payload.backupPath));
+      }
+   }
+
+
    React.useEffect(()=>{
+      dispatch(GetSettings());
       setSched(settings.schedule);
       setDir(settings.backupPath);
       setFiles(backups.files);
    },[]);
 
    if(loading || settings.length === 0 || files === undefined){
-      return <div>loading...</div>
+      return <Loader />
    }
 
    return(
-      <Grid spacing={2} container className="settingsPage">
+      <Grid 
+	 container 
+	 className="settingsPage"
+	 component={motion.div}
+	 initial={{ opacity: 0,y: -50 }}
+	 animate={{ opacity: 1, y: 0 }}
+	 transition={{ duration: .8 }}
+      >
 	 <Grid item md={12} sm={12}>
 	    <TextField
 	       size="small"
@@ -51,9 +78,11 @@ function SettingsPage() {
 		  const resDir = await DialogAPI.OpenDialog();
 		  setDir(resDir);
 	       }}
-	       inputProps={{
-		  style: { color: "white", borderColor: "white" }
+	       InputProps={{
+		  style: {outline: "none", color: "white"},
+		  startAdornment: <InputAdornment position="start"><Eject /></InputAdornment>
 	       }}
+	       
 	       InputLabelProps={{
 		  style: { color: "white" }
 	       }}
@@ -68,10 +97,10 @@ function SettingsPage() {
 	       fullWidth
 	       label="Schedule"
 	       onChange={handleSchedChange}
-	       style={{ WebkitAppRegion: "no-drag" }}
-	       inputProps={{
+	       style={{ WebkitAppRegion: "no-drag", outline: "none",paddingRight: "5px" }}
+	       InputProps={{
 		  style: { color: "white" }
-	       }}
+	       }} 
 	       InputLabelProps={{
 		  style: { color: "white" }
 	       }}
@@ -82,7 +111,6 @@ function SettingsPage() {
 			className="sel-item"
 			value={Object.values(schedule).toString()}
 			style={{ WebkitAppRegion: "no-drag"}}
-			inputProps={{ style: {color: "white"} }}
 			key={i}
 		     >{i == 0 ? 'Weekly' : i == 1 ? 'Monthly' : 'Once a day'}</MenuItem>
 		  );
@@ -93,21 +121,19 @@ function SettingsPage() {
 	    <Button 
 	       fullWidth 
 	       variant="contained"
-	       onClick={async()=>{
-		  const res = await dispatch(SetSettings({
-		     ...settings,
-		     schedule: sched,
-		     backupPath: dir
-		  }));
-
-		  if( SetSettings.fulfilled.match(res) ){
-		     await dispatch(GetSettings());
-		     await dispatch(BackupList(dir));
-		  }
-	       }}
+	       onClick={handleSaveSettings}
 	    >Save</Button>
 	 </Grid>
-	 <Grid item md={12} sm={12}>
+	 <Grid 
+	    item md={12} 
+	    sm={12} 
+	    style={
+	       { 
+		  border: "1px solid #1976D2",
+		  borderRadius:"5px",
+	       }
+	    }
+	 >
 	    <TableContainer 
 		  style={
 		     { 
@@ -115,7 +141,7 @@ function SettingsPage() {
 			height: "150px",
 			fontSize: ".6em",
 			color: "white",
-			WebkitAppRegion: "no-drag"
+			WebkitAppRegion: "no-drag",
 		     }
 		  } 
 	    >
@@ -128,17 +154,17 @@ function SettingsPage() {
 		     </TableRow>
 		  </TableHead>  
 		  <TableBody>
-		     {files.map((file,i)=>{
+		     {backups.files.map((file,i)=>{
 			return(
 			   <TableRow hover key={i}>
 			      <TableCell style={{ color: "white", cursor: "pointer" }}>
 				 {file.file_name.charAt(0).toUpperCase() + file.file_name.slice(1)}
 			      </TableCell>
 			      <TableCell style={{ color: "white", cursor: "pointer" }}>
-				 {file.isDirectory ? "Folder" : file.file_name.split('.')[1]}
+				 {file.isDirectory === true ? "Folder" : file.file_name.split('.')[1]}
 			      </TableCell>
 			      <TableCell style={{ color: "white", cursor: "pointer" }}>
-				 {file.isDirectory === false ? Math.round(file.stats.size / 1024) : '---'}
+				 {file.isDirectory == false ? Math.round(file.stats.size / 1024) : '---'}
 			      </TableCell>
 			   </TableRow>
 			);	

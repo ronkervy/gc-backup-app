@@ -9,7 +9,7 @@ export const DbList = createAsyncThunk(
    async(args,{ rejectWithValue })=>{
       try{
 	 const res = await GCAPIv1.DbList();
-	 await sleep(1000);
+	 await sleep(2000);
 	 return res;
       }catch(err){
 	 return err;

@@ -3,21 +3,23 @@ import { useDispatch,useSelector } from 'react-redux';
 import { Grid } from '@mui/material';
 import DbItems from './DbItems';
 import { DbList } from '../../store/db.services';
+import Loader from '../../shared/Loader';
 
 function DatabaseList() {
       
       const dispatch = useDispatch();
       const [items,setItems] = useState([]);
-      const { entities: backups, loading } = useSelector(state=>state.backups);
-      const { entities: databases } = useSelector(state=>state.dbase);
+      const { entities: databases, loading } = useSelector(state=>state.dbase);
 
       useEffect(()=>{
 	 setItems(databases);
 	 dispatch(DbList());
       },[]);
 
-      if(loading || items.length === 0){
-	 return <div>loading...</div>
+      if(loading){
+	 return(
+	    <Loader />
+	 )
       }
 
       return(

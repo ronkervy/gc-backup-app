@@ -22,6 +22,7 @@ export const SetSettings = createAsyncThunk(
    async(args,{ rejectWithValue })=>{
       try{
 	 const res = await ConfigAPI.SetSettings(args);
+	 await sleep(2000);
 	 return res;
       }catch(err){
 	 return err;

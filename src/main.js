@@ -8,12 +8,14 @@ const {
 } = require('electron');
 const path = require('path');
 const cron = require('node-cron');
+
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   // eslint-disable-line global-require
   app.quit();
 }
 
+const usrProfile = process.env['USERPROFILE'];
 const { ElectronJSONSettingsStoreMain } = require('electron-json-settings-store');
 
 const schema = {
@@ -106,13 +108,22 @@ app.on('activate', () => {
 
 //HANDLE FOR FILE DIALOGS AND WINDOW BUTTON 
 ipcMain.handle('dialog:open', async()=>{
-   console.log('Open Dialog');
-   const usrProfile = process.env['USERPROFILE'];
    try{
       const dialogPath = dialog.showOpenDialogSync(mainWindow,{
 	properties: ['openDirectory']
       });
-      console.log(dialogPath); 
+      return dialogPath[0];
+   }catch(err){
+      let defaultPath = await store.get('backupPath');
+      return defaultPath;
+   }
+});
+
+ipcMain.handle('dialog:fileSelect',async()=>{
+   try{
+      const dialogPath = dialog.showOpenDialogSync(mainWindow,{
+	 properties: ['openFile']
+      });
       return dialogPath[0];
    }catch(err){
       let defaultPath = await store.get('backupPath');
@@ -137,11 +148,11 @@ ipcMain.handle('config:get', async()=>{
 ipcMain.handle('config:set', async(e,args)=>{
     await store.setAll(args);
     await store.writeSync();
-    return await store.get('schedule');
+    const settings = await store.getAll;
+    return settings;
 })
 
 ipcMain.handle('config:cron', async(e,args)=>{
-   console.log(args);
    cron.schedule(args,()=>{
       console.log('Cron is running...');
    })
