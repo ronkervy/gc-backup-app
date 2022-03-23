@@ -16,6 +16,7 @@ import Loader from './shared/Loader';
 import { DbList } from './store/db.services';
 import { BackupList } from './store/backup.services'
 import { GetSettings } from './store/settings.services';
+import QuickBackupModal from './components/modals/QuickBackupModal';
 
 function App() {
 
@@ -56,6 +57,7 @@ function App() {
 	    <Routes>
 	       <Route path="/" element={<Backup />} />
 	       <Route path="/backups/database" element={<DatabaseList />} />
+	       <Route path="/backups/quick" element={<QuickBackupModal />} />
 	       <Route path="/settings" element={<SettingsPage />} />
 	    </Routes>
 	 </Grid> 

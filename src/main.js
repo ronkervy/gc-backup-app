@@ -8,7 +8,7 @@ const {
 } = require('electron');
 const path = require('path');
 const cron = require('node-cron');
-
+const { execSync } = require('child_process');
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   // eslint-disable-line global-require
@@ -158,5 +158,12 @@ ipcMain.handle('config:cron', async(e,args)=>{
    })
 });
 
+ipcMain.handle('config:setenv', async(e,args)=>{
+   try{
+      await execSync('setx REACT_APP_GC_BACKUP 1');
+   }catch(err){
+      return err;
+   }
+});
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.

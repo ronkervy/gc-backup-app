@@ -6,7 +6,7 @@ const { mongoConnect } = require('../../config/db.config');
 const cron = require('node-cron');
 const { opendir,open,stat,access,readdir,lstat } = require('fs/promises');
 const { constants } = require('fs');
-
+const moment = require('moment');
  
 module.exports = {
 
@@ -48,7 +48,6 @@ module.exports = {
 	 let dirPath = fpath !== undefined ? fpath : path.join(__dirname,'../../backups')
 	 const folder_files = await readdir(dirPath);
 	 let files = [];
-	 console.log(dirPath);
 	 try{
 	    
 	    for (let file of folder_files){
@@ -56,6 +55,8 @@ module.exports = {
 	       files.push({
 		  isDirectory: !stats.isFile(),
 		  file_name: file,
+		  file_name_length: file.length,
+		  file_ext : path.extname(file),
 		  stats
 	       });
 	    };
@@ -73,10 +74,16 @@ module.exports = {
     
     CreateBackup: async(req,res,next)=>{
 	try{
-	    const { path: fpath } = req.body;
+	    const { path: fpath,dbName } = req.body;
 	    let filePath =  fpath !== '' ? fpath : path.join(__dirname,'./backups');
  	    let execPath = path.join(__dirname,'../../lib/mongodump.exe');
-	    const resBackup = await execFileSync(execPath,[`/gzip`,`/db:airbnb`,`/out:${filePath}`]);
+	    const params = [`/gzip`,`/out:${filePath}/gc_backups/${moment().format()}`];
+	    
+	    if(dbName !== '' || dbName !== undefined){
+	       params.push(`/db:${dbName}`);
+	    }
+
+	    const resBackup = await execFileSync(execPath,params);
 	    if( resBackup ){
 		res.status(201).json({
 		    payloadType: typeof(resBackup),
@@ -85,7 +92,8 @@ module.exports = {
 		});
 	    }else{
 		return next(createHttpError.BadRequest({
-		  resBackup
+	    	    resBackup,
+		    message: 'Error creating backup.'
 		}));
 	    }
 	}catch(err){

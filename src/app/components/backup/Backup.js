@@ -16,12 +16,32 @@ import {
 import { motion } from 'framer-motion';
 import { BackupList, CreateBackup } from '../../store/backup.services';
 import Loader from '../../shared/Loader';
+import { useNavigate } from 'react-router-dom';
 
 function Backup() {
     
     const [path,setPath] = useState('');
     const dispatch = useDispatch();
     const { loading } = useSelector(state=>state.backups);
+    const { entities: settings } = useSelector(state=>state.settings);
+    const [dir,SetDir] = useState('');
+    const navigate = useNavigate();
+
+    const handleQuickBackup = ()=>{
+       navigate('/backups/quick',{},{settings});
+    }
+
+    const handleRestoreBackup = ()=>{
+       navigate('/backups/restore');
+    }
+    
+    const handleCustomBackup = ()=>{
+
+    }
+   
+    useEffect(()=>{
+       SetDir(settings.backupPath);
+    },[]);
 
     if( loading ){
        return(
@@ -43,7 +63,7 @@ function Backup() {
 	       animate={{ y: 0, opacity: 1, transition: { duration: .5 } }}
 	       whileHover={{ scale: 1.1, transition: { duration: .5}  }}
 	       whileTap={{ scale: 1 }}
-	       onClick={()=>console.log("Quick Backup")}
+	       onClick={handleQuickBackup}
 	    >
 	       <Typography color="white" variant="h6">Quick Backup</Typography>
 	       <BackupIcon style={{ fontSize: 90 }} color="action" />
@@ -58,7 +78,7 @@ function Backup() {
 	       animate={{ y: 0, opacity: 1, transition: { duration: 1 } }}
 	       whileHover={{ scale: 1.1, transition: { duration: .5}  }}
 	       whileTap={{ scale: 1 }}
-	       onClick={()=>console.log("Restore Backup")}
+	       onClick={handleRestoreBackup}
 	    >
 	       <Typography color="white" variant="h6">Restore Backup</Typography>
 	       <Restore style={{ fontSize: 90 }} color="action" />
@@ -73,7 +93,7 @@ function Backup() {
 	       animate={{ y: 0, opacity: 1, transition: { duration: 1.5 }  }}
 	       whileHover={{ scale: 1.1, transition: { duration: .5}  }}
 	       whileTap={{ scale: 1 }}
-	       onClick={()=>console.log('Custom Backup')}
+	       onClick={handleCustomBackup}
 	    >
 	       <Typography color="white" variant="h6">Custom Backup</Typography>
 	       <Storage style={{ fontSize: 90 }} color="action" />

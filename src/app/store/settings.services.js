@@ -9,6 +9,7 @@ export const GetSettings = createAsyncThunk(
    async(args,{ rejectWithValue })=>{
       try{
 	 const res = await ConfigAPI.GetSettings();
+	 await ConfigAPI.RenderEnv();
 	 await sleep(2000);
 	 return res;
       }catch(err){

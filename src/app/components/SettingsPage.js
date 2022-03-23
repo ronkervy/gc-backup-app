@@ -154,7 +154,7 @@ function SettingsPage() {
 		     </TableRow>
 		  </TableHead>  
 		  <TableBody>
-		     {backups.files.map((file,i)=>{
+		     {backups.files.filter(file=>file.file_ext == '.zip' || file.file_ext == '.rar').map((file,i)=>{
 			return(
 			   <TableRow hover key={i}>
 			      <TableCell style={{ color: "white", cursor: "pointer" }}>

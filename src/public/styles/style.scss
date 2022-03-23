@@ -138,12 +138,12 @@ button,input,form,a,a:visited{
       right: 0;
       z-index: 10;
       position: fixed;
-      background: radial-gradient(circle, rgba(44,85,189,1) 0%, rgba(19,38,111,1) 100%);
+      background: radial-gradient(circle, rgba(0,0,0,.5) 0%, rgba(3,3,3,.5) 100%);
       .spinner{
 	 &:before{
 	    display: block;
 	    content: "";   
-	    border-top: 2px solid #1E3A90;
+	    border-top: 4px solid white;
 	    height: 50px;
 	    width: 50px;
 	    top: 45%;
@@ -156,7 +156,7 @@ button,input,form,a,a:visited{
 	 &:after{
 	    display: block;
 	    content: "";
-	    border-bottom: 2px solid #1E3A90;
+	    border-bottom: 4px solid white;
 	    height: 50px;
 	    width: 50px;
 	    top: 45%;
