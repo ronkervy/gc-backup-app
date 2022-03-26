@@ -4,36 +4,25 @@ const {
   session,
   dialog,
   ipcMain,
-  shell
+  shell,
+  Menu,
+  Tray
 } = require('electron');
 const path = require('path');
 const cron = require('node-cron');
 const { execSync } = require('child_process');
+const { access,mkdir } = require('fs/promises');
+const { constants } = require('fs');
+const schema = require('./config/schedule.schema');
+const MenuTemplate = require('./config/tray.template');
+
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
   // eslint-disable-line global-require
   app.quit();
 }
 
-const usrProfile = process.env['USERPROFILE'];
 const { ElectronJSONSettingsStoreMain } = require('electron-json-settings-store');
-
-const schema = {
-   scheduleFormat: { type: 'array', items: { type: "object" }, default: [
-      {
-	 weekly : "0 9 */7 * *"
-      },
-      {
-	 monthly: "0 9 */30 * *"
-      },
-      {
-	 once_a_day: "0 9 * * *"
-      }
-   ]},
-   schedule : { type: 'string', default: '0 9 */7 * *' },
-   backupPath: { type: 'string', default: 'C:/backups' }
-}
-
 const store = new ElectronJSONSettingsStoreMain(schema,{ writeBeforeQuit: true });
 
 const initializeStore = async()=>{
@@ -41,6 +30,7 @@ const initializeStore = async()=>{
 }
 
 let mainWindow;
+let tray = null;
 
 const createWindow = () => {
   // Create the browser window.
@@ -74,19 +64,22 @@ const createWindow = () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready',()=>{
-  if( process.env.NODE_ENV == "development" ){
-    const { 
-      default: installExtension, 
-      REACT_DEVELOPER_TOOLS, 
-      REDUX_DEVTOOLS 
-    } = require('electron-devtools-installer');
+   if( process.env.NODE_ENV == "development" ){
+       const { 
+	 default: installExtension, 
+	 REACT_DEVELOPER_TOOLS, 
+	 REDUX_DEVTOOLS 
+       } = require('electron-devtools-installer');
 
-    installExtension(REDUX_DEVTOOLS)
-	.then((name) => console.log(`Added Extension:  ${name}`))
-	.catch((err) => console.log('An error occurred: ', err));
-  }
-  initializeStore();
-  createWindow();
+       installExtension(REDUX_DEVTOOLS)
+	   .then((name) => console.log(`Added Extension:  ${name}`))
+	   .catch((err) => console.log('An error occurred: ', err));
+   }
+   
+   console.log(MenuTemplate(mainWindow));
+
+   initializeStore();
+   createWindow();
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
@@ -119,16 +112,8 @@ ipcMain.handle('dialog:open', async()=>{
    }
 });
 
-ipcMain.handle('dialog:fileSelect',async()=>{
-   try{
-      const dialogPath = dialog.showOpenDialogSync(mainWindow,{
-	 properties: ['openFile']
-      });
-      return dialogPath[0];
-   }catch(err){
-      let defaultPath = await store.get('backupPath');
-      return defaultPath;
-   }
+ipcMain.handle('dialog:openFile',async(e,args)=>{
+   shell.openPath(args);
 });
 
 ipcMain.handle('window:close',()=>{
@@ -150,9 +135,16 @@ ipcMain.handle('config:set', async(e,args)=>{
     await store.writeSync();
     const settings = await store.getAll;
     return settings;
-})
+});
+
+ipcMain.handle('config:reset', async()=>{
+   await store.reset();
+   const settings = await store.getAll;
+   return settings;
+});
 
 ipcMain.handle('config:cron', async(e,args)=>{
+   console.log(args);
    cron.schedule(args,()=>{
       console.log('Cron is running...');
    })

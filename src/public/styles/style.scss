@@ -41,6 +41,21 @@ button,input,form,a,a:visited{
   height: 100%;
 }
 
+.backupModal{
+   outline: none;
+   background: white;
+   top: 50%;
+   left: 50%;
+   transform: translate(-50%,-50%);
+   position: absolute;
+   border-radius: 8px;
+   width: 400px !important;
+   height: 300px !important;
+   .quickBackupContent{
+         
+   }
+}
+
 .App{
   display: flex;
   justify-content: center;

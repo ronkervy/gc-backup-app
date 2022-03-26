@@ -17,6 +17,7 @@ import { DbList } from './store/db.services';
 import { BackupList } from './store/backup.services'
 import { GetSettings } from './store/settings.services';
 import QuickBackupModal from './components/modals/QuickBackupModal';
+import RestoreModal from './components/modals/RestoreModal';
 
 function App() {
 
@@ -58,6 +59,7 @@ function App() {
 	       <Route path="/" element={<Backup />} />
 	       <Route path="/backups/database" element={<DatabaseList />} />
 	       <Route path="/backups/quick" element={<QuickBackupModal />} />
+	       <Route path="/backups/restore" element={<RestoreModal />} />
 	       <Route path="/settings" element={<SettingsPage />} />
 	    </Routes>
 	 </Grid> 

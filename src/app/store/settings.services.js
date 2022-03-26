@@ -30,3 +30,16 @@ export const SetSettings = createAsyncThunk(
       }
    }
 );
+
+export const ResetSettings = createAsyncThunk(
+   'settings/ResetSettings',
+   async(args,{ rejectWithValue })=>{
+      try{
+	 const res = await ConfigAPI.ResetSettings();
+	 await sleep(2000);
+	 return res;
+      }catch(err){
+	 return err;
+      }
+   }
+);

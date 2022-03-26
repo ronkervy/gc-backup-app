@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import {
    GetSettings,
-   SetSettings
+   SetSettings,
+   ResetSettings
 } from './settings.services';
 
 const initialState = {
@@ -35,6 +36,18 @@ const SettingsSlice = createSlice({
 	 state.entities = payload;
       })
       .addCase(SetSettings.rejected,(state,{ payload })=>{
+	 state.loading = false;
+	 state.error = payload;
+      })
+      //RESET SETTINGS
+      .addCase(ResetSettings.pending,state=>{
+	 state.loading = true;
+      })
+      .addCase(ResetSettings.fulfilled,(state,{ payload })=>{
+	 state.loading = false;
+	 state.entities = payload;
+      })
+      .addCase(ResetSettings.rejected,(state,{ payload })=>{
 	 state.loading = false;
 	 state.error = payload;
       })

@@ -4,7 +4,7 @@ const createHttpError = require('http-errors');
 const path = require('path');
 const { mongoConnect } = require('../../config/db.config');
 const cron = require('node-cron');
-const { opendir,open,stat,access,readdir,lstat } = require('fs/promises');
+const { mkdir,opendir,open,stat,access,readdir,lstat } = require('fs/promises');
 const { constants } = require('fs');
 const moment = require('moment');
  
@@ -45,16 +45,18 @@ module.exports = {
     BackupList: async(req,res,next)=>{ 
 	 const { file_path: fpath } = req.query;
 	 let fh = null;
-	 let dirPath = fpath !== undefined ? fpath : path.join(__dirname,'../../backups')
-	 const folder_files = await readdir(dirPath);
+	 let dirPath = `${fpath}`;
+	 
 	 let files = [];
+         
+	 const folder_files = await readdir(dirPath);
 	 try{
-	    
 	    for (let file of folder_files){
 	       let stats = await lstat(`${dirPath}/${file}`);
 	       files.push({
 		  isDirectory: !stats.isFile(),
 		  file_name: file,
+		  file_path: `${dirPath}`,
 		  file_name_length: file.length,
 		  file_ext : path.extname(file),
 		  stats
@@ -77,7 +79,7 @@ module.exports = {
 	    const { path: fpath,dbName } = req.body;
 	    let filePath =  fpath !== '' ? fpath : path.join(__dirname,'./backups');
  	    let execPath = path.join(__dirname,'../../lib/mongodump.exe');
-	    const params = [`/gzip`,`/out:${filePath}/gc_backups/${moment().format()}`];
+	    const params = [`/gzip`,`/out:${filePath}/${moment().format()}`];
 	    
 	    if(dbName !== '' || dbName !== undefined){
 	       params.push(`/db:${dbName}`);

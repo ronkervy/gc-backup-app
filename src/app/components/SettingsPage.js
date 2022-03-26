@@ -4,6 +4,7 @@ import {
    TextField,
    MenuItem,
    Button,
+   ButtonGroup,
    Table,
    TableContainer,
    TableHead,
@@ -12,22 +13,33 @@ import {
    TableRow,
    InputAdornment
 } from '@mui/material';
+import Reset from './modals/ResetSettings';
+import { ResetSettings } from '../store/settings.services';
+import {
+   Folder,
+   Assignment,
+   ArrowBack
+} from '@mui/icons-material'
+
 import { Eject } from '@mui/icons-material';
 import { GetSettings,SetSettings } from '../store/settings.services';
 import { useSelector,useDispatch } from 'react-redux';
 import { BackupList } from '../store/backup.services';
 import { motion } from 'framer-motion';
 import Loader from '../shared/Loader';
+import { useNavigate } from 'react-router-dom';
 
 function SettingsPage() {
 
    const dispatch = useDispatch();
+   const navigate = useNavigate();
    const { entities: backups, loading: backupLoading } = useSelector(state=>state.backups);
    const { entities: settings,loading } = useSelector(state=>state.settings);
    
    const [sched,setSched] = React.useState('');
    const [dir,setDir] = React.useState('');
    const [files,setFiles] = React.useState([]);
+   const [folderPaths,setFolderPaths] = React.useState([]);
 
    const handleSchedChange = (e)=>{
       setSched(e.target.value);
@@ -42,17 +54,39 @@ function SettingsPage() {
 
       if( SetSettings.fulfilled.match(res) ){
 	 dispatch(GetSettings());
-	 dispatch(BackupList(res.payload.backupPath));
+	 setDir(res.payload.backupPath);
+	 ConfigAPI.CronJob(res.payload.schedule);
       }
    }
 
+   const setPaths = (path)=>{
+       setFolderPaths(path.replaceAll('\\','/').split('/'));
+   }
+
+   const handleBack = ()=>{
+      if(folderPaths.length <= 1) return;
+      setFolderPaths(state=>{
+	 return state.slice(0, -1);
+      });
+   }
 
    React.useEffect(()=>{
       dispatch(GetSettings());
       setSched(settings.schedule);
       setDir(settings.backupPath);
       setFiles(backups.files);
+      setPaths(settings.backupPath);
    },[]);
+
+   React.useEffect(()=>{
+      setDir(folderPaths.toString().replaceAll(',','/'));
+   },[folderPaths]);
+
+   React.useEffect(()=>{
+      if( dir !== '' ){
+	 dispatch(BackupList(dir));
+      }
+   },[dir]);
 
    if(loading || settings.length === 0 || files === undefined){
       return <Loader />
@@ -76,6 +110,8 @@ function SettingsPage() {
 	       value={dir}
 	       onClick={async()=>{
 		  const resDir = await DialogAPI.OpenDialog();
+		  dispatch(BackupList(resDir));
+		  setPaths(resDir);
 		  setDir(resDir);
 	       }}
 	       InputProps={{
@@ -117,12 +153,23 @@ function SettingsPage() {
 	       })}
 	    </TextField>
 	 </Grid> 
-	 <Grid item md={6} sm={6}>
-	    <Button 
-	       fullWidth 
-	       variant="contained"
-	       onClick={handleSaveSettings}
-	    >Save</Button>
+         <Grid item md={6} sm={6}>
+	    <ButtonGroup fullWidth >
+	       <Button 
+		  fullWidth 
+		  variant="contained"
+		  onClick={handleSaveSettings}
+	       >Save</Button>
+	       <Button
+		  fullWidth
+		  variant="contained"
+		  color="secondary"
+		  onClick={()=>{
+		     dispatch(ResetSettings());
+		     dispatch(GetSettings());
+		  }}
+	       >Reset</Button>
+	    </ButtonGroup>
 	 </Grid>
 	 <Grid 
 	    item md={12} 
@@ -148,15 +195,35 @@ function SettingsPage() {
 	       <Table size="small" stickyHeader aria-label="sticky table">
 		  <TableHead>
 		     <TableRow>
+			<TableCell>---</TableCell>
 			<TableCell>Filename</TableCell>
 			<TableCell>Type</TableCell>
 			<TableCell>Size</TableCell>
 		     </TableRow>
 		  </TableHead>  
 		  <TableBody>
-		     {backups.files.filter(file=>file.file_ext == '.zip' || file.file_ext == '.rar').map((file,i)=>{
+		     <TableRow hover >
+			<TableCell 
+			   colSpan={4} 
+			   style={{ cursor: "pointer", color: "white" }}
+			   onClick={handleBack}
+			>
+			   <ArrowBack />
+			</TableCell>
+		     </TableRow>
+		     {backups.files.map((file,i)=>{
 			return(
-			   <TableRow hover key={i}>
+			   <TableRow 
+			      hover 
+			      key={i}
+			      onDoubleClick={async()=>{
+				 if(!file.isDirectory) return await DialogAPI.OpenFile(`${file.file_path}/${file.file_name}`);
+				 setDir(`${file.file_path}/${file.file_name}`);
+				 setPaths(`${file.file_path}/${file.file_name}`);
+				 dispatch(BackupList(`${file.file_path}/${file.file_name}`));
+			      }}
+			   >
+			      <TableCell style={{ color: "white" }}>{file.isDirectory ? <Folder /> : <Assignment /> }</TableCell>
 			      <TableCell style={{ color: "white", cursor: "pointer" }}>
 				 {file.file_name.charAt(0).toUpperCase() + file.file_name.slice(1)}
 			      </TableCell>

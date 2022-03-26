@@ -11,6 +11,7 @@ contextBridge.exposeInMainWorld(
   'DialogAPI',
   {
     OpenDialog: ()=> ipcRenderer.invoke('dialog:open'),
+    OpenFile: (args)=> ipcRenderer.invoke('dialog:openFile',args),
     CloseBtn: ()=> ipcRenderer.invoke('window:close'),
     MinimizeBtn: ()=> ipcRenderer.invoke('window:min')
   } 
@@ -22,7 +23,8 @@ contextBridge.exposeInMainWorld(
     GetSettings: ()=> ipcRenderer.invoke('config:get'),
     SetSettings: (args)=> ipcRenderer.invoke('config:set',args),
     CronJob: (args)=> ipcRenderer.invoke('config:cron',args),
-    RenderEnv: ()=> ipcRenderer.invoke('config:setenv')
+    RenderEnv: ()=> ipcRenderer.invoke('config:setenv'),
+    ResetSettings: ()=> ipcRenderer.invoke('config:reset')
   }
 );
 
