@@ -11,5 +11,5 @@ module.exports = {
   externals: [nodeExternals()],
   module: {
     rules: require('./webpack.rules'),
-  },
+  }
 };

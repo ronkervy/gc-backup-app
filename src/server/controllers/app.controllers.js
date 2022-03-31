@@ -78,9 +78,9 @@ module.exports = {
 	try{
 	    const { path: fpath,dbName } = req.body;
 	    let filePath =  fpath !== '' ? fpath : path.join(__dirname,'./backups');
- 	    let execPath = path.join(__dirname,'../../lib/mongodump.exe');
-	    const params = [`/gzip`,`/out:${filePath}/${moment().format()}`];
-	    
+ 	    let execPath = process.env.NODE_ENV == "development" ? path.join(__dirname,'../../lib/mongodump.exe') : path.join(__dirname,'../../../src/lib/mongodump.exe').replace('app.asar', 'app.asar.unpacked');
+	    const params = [`/gzip`,`/out:${filePath}/gc_backup/${moment().format().split('T')[0]}`];
+	    console.log(execPath); 
 	    if(dbName !== '' || dbName !== undefined){
 	       params.push(`/db:${dbName}`);
 	    }
@@ -99,16 +99,29 @@ module.exports = {
 		}));
 	    }
 	}catch(err){
-	    return next(createHttpError.NotFound());
+	    return next(createHttpError.NotFound({
+	       err
+	    }));
 	}
     },
     
     RestoreBackup: async(req,res,next)=>{
 	try{
-	  const { path: fPath } = req.body;
+	  const { path: fPath,dbList } = req.body;
 	  const filePath = fPath !== '' ? fPath : path.join(__dirname,'./backups');
-	  let execPath = path.join(__dirname,'../../lib/mongorestore.exe');
-	  const resRestore = await execFileSync(execPath,[`/db:airbnb`,`/dir:${filePath}`,`/gzip`]);
+	  const params = [`/drop`,`/gzip`,`/dir:${filePath}`]
+	  
+	  let execPath = process.env.NODE_ENV == "development" ? path.join(__dirname,'../../lib/mongorestore.exe') : path.join(__dirname,'../../../src/lib/mongorestore.exe').replace('app.asar','app.asar.unpacked');
+	  
+	  console.log(execPath);
+
+	  if( dbList.length !== 0 || dbList !== undefined ){
+	     dbList.map((dbname,i)=>{
+	       params.unshift(`/nsInclude:${dbname}.*`);
+	     });
+	  }
+
+	  const resRestore = await execFileSync(execPath,params);
 	  if(resRestore){
 	      res.status(200).json({
 		  resRestore,
@@ -124,35 +137,5 @@ module.exports = {
 		  message: err
 	      }));
 	}
-    },
-
-    WeeklyBackup: async(req,res,next)=>{
-	try{
-	    await cron.schedule('0 8 */7 * *',()=>{
-		console.log('working weekly');
-	    });
-	    return res.status(200).json({
-		message: "Weekly Backup Running."
-	    });
-	}catch(err){
-	    return next(createHttpError.NotFound({
-		message: err
-	    }));
-	}
-    },
-
-    MonthlyBackup: async(req,res,next)=>{
-	try{
-	    cron.schedule('0 0 1 * *', ()=>{
-		console.log('Monthly Backup is active.');
-	    })	  
-	}catch(err){
-	    return next();
-	}
-    },
-
-    DeleteBackup: async()=>{
-
     }
-
 }

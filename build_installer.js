@@ -9,7 +9,7 @@ const msiCreator = new MSICreator({
   name: 'GC BACKUP APP',
   manufacturer: 'KVM Tech',
   version: '1.0.1',
-  appIconPath : path.resolve(__dirname,'./src/app/logo.ico'),
+  appIconPath : path.resolve(__dirname,'./src/public/img/logo.ico'),
   outputDirectory: path.resolve(__dirname,'./msi'),
   features : {
     autoLaunch : true

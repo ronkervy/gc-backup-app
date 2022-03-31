@@ -3,12 +3,28 @@ import {
    Backdrop,
    Modal,
    Fade,
-   Grid
+   Grid,
+   ButtonGroup,
+   Button,
+   Typography,
+   CircularProgress
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-
+import { Storage,Backup } from '@mui/icons-material'
+import { useNavigate,useLocation } from 'react-router-dom';
+import {
+   useDispatch,
+   useSelector
+} from 'react-redux';
+import {
+   CreateBackup
+} from '../../store/backup.services';
+import Ring from '../../shared/Ring';
+import {motion} from 'framer-motion';
 function QuickBackupModal(props) {
-   const state = props;
+   
+   const dispatch = useDispatch();
+   const { entities: backups,loading } = useSelector(state=>state.backups);
+   const location = useLocation();
    const [open,setOpen] = React.useState(false);
    const navigate = useNavigate();
    
@@ -16,10 +32,17 @@ function QuickBackupModal(props) {
       navigate(-1);
       setOpen(false);
    };
-   const handleOpen = ()=> setOpen(true);
+   
+   const handleBackup = ()=>{
+      const { backupPath } = location.state;
+      dispatch(CreateBackup({
+	 path: backupPath,
+	 dbName: ''
+      }));
+   }
 
    React.useEffect(()=>{
-      handleOpen();
+      setOpen(true)
    },[]);
 
    return(
@@ -38,15 +61,65 @@ function QuickBackupModal(props) {
 	       boxShadow={4}
 	       container
 	       className="backupModal"
+	       display="flex"
+	       justifyContent="center"
+	       alignItems="center"
 	    >
 	       <Grid 
 		  item 
 		  md={12} 
 		  sm={12} 
 		  className="quickBackupContent"
+		  display="flex"
+		  justifyContent="center"
+		  alignItems="center"
+		  style={{ flexDirection: "column" }}
 	       >
-		  TEST
-	       </Grid> 
+		  {loading ? (
+		     <Typography
+			color="white" 
+			align="center" 
+			variant="h6"
+		     >
+			Backing up all database.<br />
+			Please wait...
+		     </Typography>
+		  ) : (
+		     <Typography 
+			color="white" 
+			align="center" 
+			variant="h6"
+		     >
+			This will backup all<br />the current database.
+		     </Typography>
+		  )}
+	       </Grid>
+	       <Grid 
+		  display="flex" 
+		  flexDirection="column" 
+		  justifyContent="center"
+		  alignItems="center"
+		  item md={12} sm={12}
+	       >
+		  {loading ? <Ring /> : <Backup style={{ fontSize: "80px"}} color="action" />}
+	       </Grid>
+	       <Grid 
+		  item 
+		  justifyContent="center" 
+		  display="flex" 
+		  md={12} sm={12}
+	       >
+		  <Button
+		     variant="contained" 
+		     color="primary"
+		     onClick={handleBackup}
+		  >Proceed</Button>&nbsp;
+		  <Button 
+		     variant="contained" 
+		     color="secondary"
+		     onClick={handleClose}
+		  >Cancel</Button>
+	       </Grid>
 	    </Grid>
 	 </Fade>
       </Modal> 

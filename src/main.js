@@ -50,13 +50,15 @@ const createWindow = () => {
   });
 
   mainWindow.on('ready-to-show',()=>{
-    mainWindow.show();
+      setTimeout(()=>{
+	 mainWindow.show();
+	 mainWindow.focus();
+      },0);
   });
   
 
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
-  
   // Open the DevTools.  
 };
 
@@ -76,8 +78,31 @@ app.on('ready',()=>{
 	   .catch((err) => console.log('An error occurred: ', err));
    }
    
-   console.log(MenuTemplate(mainWindow));
-
+   tray = tray == null ? new Tray(path.join(__dirname,'./public/img/logo.ico')) : tray;
+   
+   const contextMenu = Menu.buildFromTemplate(
+      [
+	 {
+	    label: 'Restore',
+	    click: ()=>{
+	       console.log('Show');
+	       setTimeout(()=>{
+		  mainWindow.show();
+		  mainWindow.focus();
+	       },0);
+	    }
+	 },
+	 { type: 'separator' },
+	 {
+	    label: 'Exit',
+	    click: ()=>{
+	       app.quit();
+	    }
+	 }
+     ]
+   );
+   tray.setToolTip("Backup running.");
+   tray.setContextMenu(contextMenu);
    initializeStore();
    createWindow();
 });
@@ -87,7 +112,7 @@ app.on('ready',()=>{
 // explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
-    app.quit();
+      app.quit();
   }
 });
 
@@ -121,7 +146,7 @@ ipcMain.handle('window:close',()=>{
 });
 
 ipcMain.handle('window:min',()=>{
-   mainWindow.minimize();
+   mainWindow.hide();
 });
 
 //HANDLES FOR SETTINGS
@@ -144,10 +169,20 @@ ipcMain.handle('config:reset', async()=>{
 });
 
 ipcMain.handle('config:cron', async(e,args)=>{
-   console.log(args);
-   cron.schedule(args,()=>{
+   const { schedule,backupPath } = args;
+   let task = cron.schedule(schedule,()=>{
+      const axios = require('axios');
+      axios.post('http://localhost:8083/api/v1/backups',{
+	 path: backupPath,
+	 dbName: ''
+      });
       console.log('Cron is running...');
-   })
+      mainWindow.webContents.send('cron:log','Cron is running...');
+   },{
+      schedule: true,
+      timezone: "Asia/Manila"
+   });
+   task.start();
 });
 
 ipcMain.handle('config:setenv', async(e,args)=>{

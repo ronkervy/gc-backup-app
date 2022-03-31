@@ -1,16 +1,18 @@
+const { app } = require('electron');
+
 const MenuTemplate = (win)=>{
-     return[
+      return[
 	 {
 	    label: 'Restore',
 	    click: ()=>{
-	       win.show();
+	       w.show();
 	    }
 	 },
 	 { type: 'separator' },
 	 {
 	    label: 'Exit',
 	    click: ()=>{
-	       win.close();
+	       app.quit();
 	    }
 	 }
      ]

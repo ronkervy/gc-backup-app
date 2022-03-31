@@ -8,7 +8,7 @@
     "start": "SET NODE_ENV=development && electron-forge start",
     "start:gulp": "yarn run gulp",
     "start:db": "SET NODE_ENV=development && electron-forge start --inspect-electron",
-    "package": "SET NODE_ENV=production && electron-forge package",
+    "package": "SET NODE_ENV=production && electron-forge package && node build_installer",
     "make": "SET NODE_ENV=production && electron-forge make",
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\""
@@ -20,7 +20,7 @@
     "forge": {
       "packagerConfig": {
         "asar": {
-          "unpack": "**/config/database.sqlite"
+          "unpack": "{**/config/database.sqlite,**/lib/mongodump.exe,**/lib/mongorestore.exe}"
         },
         "prune": true
       },

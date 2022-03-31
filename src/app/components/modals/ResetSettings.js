@@ -12,7 +12,7 @@ function ResetSettings() {
    const handleClose = ()=> setOpen(false);
 
    React.useEffect(()=>{
-      handleOpen();
+      setOpen(true);
    },[]);
 
    return(
@@ -21,6 +21,7 @@ function ResetSettings() {
 	 BackdropComponent={Backdrop}
 	 BackdropProps={{ timeout: 500 }}
 	 closeAfterTransition
+	 onClose={handleClose}
       >
 	 <Fade
 	    in={open}

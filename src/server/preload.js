@@ -24,7 +24,10 @@ contextBridge.exposeInMainWorld(
     SetSettings: (args)=> ipcRenderer.invoke('config:set',args),
     CronJob: (args)=> ipcRenderer.invoke('config:cron',args),
     RenderEnv: ()=> ipcRenderer.invoke('config:setenv'),
-    ResetSettings: ()=> ipcRenderer.invoke('config:reset')
+    ResetSettings: ()=> ipcRenderer.invoke('config:reset'),
+    CronLog: (channel,cb)=>{
+       ipcRenderer.on(channel,(e,args)=>cb(args))
+    } 
   }
 );
 

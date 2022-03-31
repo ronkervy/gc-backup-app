@@ -28,7 +28,7 @@ function Backup() {
     const navigate = useNavigate();
 
     const handleQuickBackup = ()=>{
-       navigate('/backups/quick',{},{settings});
+       navigate('/backups/quick',{ state: {...settings} });
     }
 
     const handleRestoreBackup = ()=>{
@@ -67,7 +67,7 @@ function Backup() {
 	    >
 	       <Typography color="white" variant="h6">Quick Backup</Typography>
 	       <BackupIcon style={{ fontSize: 90 }} color="action" />
-	       <p className="description">Quick backup database,<br /> default backup location <br />is in "C:/backups"</p>
+	       <p className="description">Quick backup database,<br /> default backup location <br />is in "C:/User/Downloads"</p>
 	    </Box>
 	    <Box
 	       boxShadow={4}

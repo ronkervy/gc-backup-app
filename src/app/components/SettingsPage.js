@@ -52,10 +52,10 @@ function SettingsPage() {
 	 backupPath: dir
       }));
 
-      if( SetSettings.fulfilled.match(res) ){
+       if( SetSettings.fulfilled.match(res) ){
 	 dispatch(GetSettings());
 	 setDir(res.payload.backupPath);
-	 ConfigAPI.CronJob(res.payload.schedule);
+	 ConfigAPI.CronJob(res.payload);
       }
    }
 

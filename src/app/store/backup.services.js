@@ -24,7 +24,20 @@ export const CreateBackup = createAsyncThunk(
 	await sleep(2000);
 	return res;
       }catch(err){
-	return err;
+	return rejectWithValue(err);
       }
   }
+);
+
+export const RestoreBackup = createAsyncThunk(
+   'backup/RestoreBackup',
+   async(args,{ rejectWithValue })=>{
+      try{
+	const res = await GCAPIv1.RestoreBackup(args);
+        await(2000);
+        return res;
+      }catch(err){
+	 return rejectWithValue(err);
+      }
+   }
 );

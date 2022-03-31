@@ -43,7 +43,7 @@ button,input,form,a,a:visited{
 
 .backupModal{
    outline: none;
-   background: white;
+   background: radial-gradient(circle, rgba(44,85,189,1) 0%, rgba(19,38,111,1) 100%);
    top: 50%;
    left: 50%;
    transform: translate(-50%,-50%);
@@ -56,13 +56,87 @@ button,input,form,a,a:visited{
    }
 }
 
+
+.ring-wrap{
+   top:0;
+   left:0;
+   right:0;
+   bottom:0;
+   background-image: linear-gradient( 63.1deg,  rgba(5,23,111,1) 16.4%, rgba(24,95,240,1) 64.5% );
+   background-size: 400% 400%;
+   position: absolute;
+   z-index: 100;
+   border-radius: 8px;
+   animation: fadeInAnimate 200ms ease-in-out forwards, gradient 5s ease infinite;
+}
+
+.ring
+{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  width:80px;
+  height:80px;
+  background:transparent;
+  border:3px solid #3c3c3c;
+  border-radius:50%;
+  text-align:center;
+  line-height:80px;
+  font-family:sans-serif;
+  font-size:7px;
+  color:white;
+  letter-spacing:4px;
+  text-transform:uppercase;
+  text-shadow:0 0 10px #1E3A90;
+  box-shadow:0 0 20px rgba(0,0,0,.5);
+   &:before
+   {
+     content:'';
+     position:absolute;
+     top:-3px;
+     left:-3px;
+     width:100%;
+     height:100%;
+     border:3px solid transparent;
+     border-top:3px solid #9BC836;
+     border-right:3px solid #9BC836;
+     border-radius:50%;
+     animation:animateC 2s linear infinite;
+   }
+   span
+   {
+     display:block;
+     position:absolute;
+     top:calc(50% - 2px);
+     left:50%;
+     width:50%;
+     height:4px;
+     background:transparent;
+     transform-origin:left;
+     animation:animate 2s linear infinite;
+   }
+   span:before
+   {
+     content:'';
+     position:absolute;
+     width:16px;
+     height:16px;
+     border-radius:50%;
+     background: #9BC836;
+     top:-6px;
+     right:-8px;
+     box-shadow:0 0 20px #9BC836;
+   }
+}
+
 .App{
   display: flex;
   justify-content: center;
   align-items: flex-start;
   -webkit-app-region: drag;
-  background: rgb(44,85,189);
-  background: radial-gradient(circle, rgba(44,85,189,1) 0%, rgba(19,38,111,1) 100%);
+background-image: radial-gradient( circle 976px at 50% 50%,  rgba(11,27,103,1) 0%, rgba(16,66,157,1) 0%, rgba(11,27,103,1) 45.3%, rgba(11,27,103,1) 58.8%, rgba(11,27,103,1) 71.4%, rgba(16,66,157,1) 100.2%, rgba(187,187,187,1) 100.2% );
+  animation: gradient 5s ease infinite;
   width: 100%;
   height:100%;
   border-radius: 8px;
@@ -85,8 +159,9 @@ button,input,form,a,a:visited{
      position: absolute;
      .mainnav{
 	 display: flex;
+	 justify-content: center;
 	 list-style-type: none;
-	 width: 400px;
+	 width: 500px;
 	 border-bottom: 2px solid #1E3A90;
 	 li{
 	    padding: 0;
@@ -95,20 +170,25 @@ button,input,form,a,a:visited{
 	 height: 40px;
 	 margin: 0px 0px 0px 0px !important;
 	 padding: 0px;
-	 .navItems{
-	    text-decoration: none;
-	    padding: 8px 10px;
-	    color: white;
-	    text-transform: uppercase;
-	    transition: background 500ms ease-in-out;
-	    &.active{
-	       border-radius: 5px;
-	       background: #142757; 
-	    }
-	    &:hover{
-	       border-radius: 5px;
-	       background: #142757;
-	       border-radius: 5px;
+	 .nav-icon-wrap{
+	    display: flex;
+	    align-items: center;
+	    justify-content: center;
+	    .navItems{
+	       text-decoration: none;
+	       padding: 8px 15px;
+	       color: white;
+	       text-transform: uppercase;
+	       transition: background 500ms ease-in-out;
+	       &.active{
+		  border-radius: 5px;
+		  background: #142757; 
+	       }
+	       &:hover{
+		  border-radius: 5px;
+		  background: #142757;
+		  border-radius: 5px;
+	       }
 	    }
 	 }
       } 
@@ -152,7 +232,7 @@ button,input,form,a,a:visited{
       bottom: 0;
       right: 0;
       z-index: 10;
-      position: fixed;
+      position: absolute;
       background: radial-gradient(circle, rgba(0,0,0,.5) 0%, rgba(3,3,3,.5) 100%);
       .spinner{
 	 &:before{
@@ -247,7 +327,53 @@ button,input,form,a,a:visited{
   }
 }
 
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes fadeInAnimate{
+   0%{
+      opacity: 0;
+   }
+   100%{
+      opacity: 1;
+   }
+}
+
 @keyframes spin{
    0%{ transform:rotate(0deg) }
    100%{ transform:rotate(360deg) }
 }
+
+@keyframes animateC
+{
+  0%
+  {
+    transform:rotate(0deg)
+  }
+  100%
+  {
+    transform:rotate(360deg)
+  }
+}
+@keyframes animate
+{
+  0%
+  {
+    transform:rotate(45deg);
+  }
+  100%
+  {
+    transform:rotate(405deg);
+  }
+}
+
+

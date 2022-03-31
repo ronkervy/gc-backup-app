@@ -18,12 +18,14 @@ import { BackupList } from './store/backup.services'
 import { GetSettings } from './store/settings.services';
 import QuickBackupModal from './components/modals/QuickBackupModal';
 import RestoreModal from './components/modals/RestoreModal';
+import CustomBackupModal from './components/modals/CustomBackupModal';
 
 function App() {
 
+   const dispatch = useDispatch();
    const [stats,setStats] = useState([]);
    const [settings,setSettings] = useState([]);
-   const dispatch = useDispatch();
+   const [cronLog,setCronLog] = useState('');
    const { entities,loading } = useSelector(state=>state.backups);
    const { entities: config,loading: settingsLoading } = useSelector(state=>state.settings);
    const { loading: dbaseLoading } = useSelector(state=>state.dbase);
@@ -39,7 +41,7 @@ function App() {
       const res = await dispatch(GetSettings());
       if( GetSettings.fulfilled.match(res) ){
 	 setSettings(res.payload);
-	 await ConfigAPI.CronJob(res.payload.schedule);
+	 await ConfigAPI.CronJob(res.payload);
 	 dispatch(BackupList(res.payload.backupPath));
       }
    }
@@ -47,7 +49,17 @@ function App() {
    useEffect(()=>{
       getList();
       initSettings();
+      ConfigAPI.CronLog(
+	 "cron:log",
+	 (data)=>{
+	    setCronLog(data);
+	 }
+      ); 
    },[]);
+
+   useEffect(()=>{
+      console.log(cronLog);
+   },[cronLog]);
 
    return(
       <Grid container className="App">
@@ -60,6 +72,7 @@ function App() {
 	       <Route path="/backups/database" element={<DatabaseList />} />
 	       <Route path="/backups/quick" element={<QuickBackupModal />} />
 	       <Route path="/backups/restore" element={<RestoreModal />} />
+	       <Route path="/backups/custom" element={<CustomBackupModal />} />
 	       <Route path="/settings" element={<SettingsPage />} />
 	    </Routes>
 	 </Grid> 
