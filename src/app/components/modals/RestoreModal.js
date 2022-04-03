@@ -69,25 +69,16 @@ function RestoreModal() {
 		  justifyContent="center"
 		  alignItems="center"
 	       >
-		  <TextField
-		     variant="outlined"
-		     size="small"
-		     value={path}
-		     label="Backup Folder"
-		     InputLabelProps={{
-			style: { color: "white", outlineColor: "white !important" }
-		     }}
-		     InputProps={{
-			startAdornment: <InputAdornment position="start"><Eject style={{ color: "white" }} /></InputAdornment>,
-			style: { color: "white" }
-		     }}
-		     onClick={async()=>{
-			const res = await DialogAPI.OpenDialog();
-			dispatch(BackupList(res));
-			setPath(res);
-		     }}
-		  />
-		  
+		  {loading ? (
+		     <Typography align="center" style={{ color: "white" }} variant="p">
+			Restoring from backup<br />
+			Please wait...
+		     </Typography>
+		  ) : (
+		     <Typography align="center" style={{ color: "white" }} variant="p">
+			Select a folder that <br />have all of your recent backups.
+		     </Typography>
+		  )}
 	       </Grid>
 	       <Grid 
 		  item 
@@ -99,19 +90,26 @@ function RestoreModal() {
 		  alignItems="center"
 	       >
 		  {loading ? (
-		     <Typography align="center" style={{ color: "white" }} variant="p">
-			Restoring from backup<br />
-			Please wait...
-		     </Typography>
-		  ) : (
-		     <Typography align="center" style={{ color: "white" }} variant="p">
-			Select a folder that <br />have all of your recent backups.
-		     </Typography>
-		  )}
-		  {loading ? (
 		     <Ring />
 		  ) : (
-		     <Storage style={{ fontSize: "60px" }} color="action" />
+		     <TextField
+			variant="outlined"
+			size="small"
+			value={path}
+			label="Backup Folder"
+			InputLabelProps={{
+			   style: { color: "white", outlineColor: "white !important" }
+			}}
+			InputProps={{
+			   startAdornment: <InputAdornment position="start"><Eject style={{ color: "white" }} /></InputAdornment>,
+			   style: { color: "white" }
+			}}
+			onClick={async()=>{
+			   const res = await DialogAPI.OpenDialog();
+			   dispatch(BackupList(res));
+			   setPath(res);
+			}}
+		     />
 		  )}
 	       </Grid>
 	       <Grid 

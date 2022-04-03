@@ -88,7 +88,7 @@ function SettingsPage() {
       }
    },[dir]);
 
-   if(loading || settings.length === 0 || files === undefined){
+   if(loading || backups.files === undefined ){
       return <Loader />
    }
 
@@ -171,7 +171,8 @@ function SettingsPage() {
 	       >Reset</Button>
 	    </ButtonGroup>
 	 </Grid>
-	 <Grid 
+	 <Grid
+	    boxShadow={4}
 	    item md={12} 
 	    sm={12} 
 	    style={

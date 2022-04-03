@@ -19,6 +19,7 @@ import { GetSettings } from './store/settings.services';
 import QuickBackupModal from './components/modals/QuickBackupModal';
 import RestoreModal from './components/modals/RestoreModal';
 import CustomBackupModal from './components/modals/CustomBackupModal';
+import SingleBackupModal from './components/modals/SingleBackupModal';
 
 function App() {
 
@@ -73,6 +74,7 @@ function App() {
 	       <Route path="/backups/quick" element={<QuickBackupModal />} />
 	       <Route path="/backups/restore" element={<RestoreModal />} />
 	       <Route path="/backups/custom" element={<CustomBackupModal />} />
+	       <Route path="/backups/single" element={<SingleBackupModal />} />
 	       <Route path="/settings" element={<SettingsPage />} />
 	    </Routes>
 	 </Grid> 

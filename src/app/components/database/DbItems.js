@@ -7,10 +7,24 @@ import {
    Storage,
    Delete
 } from '@mui/icons-material'
+import { useNavigate } from 'react-router-dom';
+import { useDispatch,useSelector } from 'react-redux';
+import { CreateBackup } from '../../store/backup.services';
+
 function DbItems(props) {
+   
+   const navigate = useNavigate();
+   const dispatch = useDispatch();
+   const { entities: config } = useSelector(state=>state.settings);
+   const [settings,setSettings] = React.useState([]);
    const { items } = props;
    
+   const handleSingleBackup = (dbName)=>{
+       navigate('/backups/single',{state: {...settings,dbName}});
+   }
+
    React.useEffect(()=>{
+      setSettings(config);
    },[]);
 
    return(
@@ -28,6 +42,9 @@ function DbItems(props) {
 		  whileHover={{ scale: 0.98, x: 2, transition: { duration: .3 } }}
 		  initial={{ x: -100, opacity: 0 }}
 		  animate={{ x: 0,opacity: 1, transition: { duration: (i + 1) * .5 } }}
+		  onClick={()=>{
+		     handleSingleBackup(dbname.name);
+		  }}
 	       >
 		  <Storage color="action" className="list-icon" />
 		  <Typography 

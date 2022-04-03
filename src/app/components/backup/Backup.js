@@ -36,7 +36,7 @@ function Backup() {
     }
     
     const handleCustomBackup = ()=>{
-       navigate('/backups/custom');
+       navigate('/backups/custom',{ state: {...settings} });
     }
    
     useEffect(()=>{

@@ -24,6 +24,7 @@
 }
 
 body, html {
+  user-select: none;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   padding: 0px;
   margin: 0px;

@@ -50,10 +50,8 @@ const createWindow = () => {
   });
 
   mainWindow.on('ready-to-show',()=>{
-      setTimeout(()=>{
-	 mainWindow.show();
-	 mainWindow.focus();
-      },0);
+      mainWindow.show();
+      mainWindow.focus();
   });
   
 
@@ -176,7 +174,6 @@ ipcMain.handle('config:cron', async(e,args)=>{
 	 path: backupPath,
 	 dbName: ''
       });
-      console.log('Cron is running...');
       mainWindow.webContents.send('cron:log','Cron is running...');
    },{
       schedule: true,

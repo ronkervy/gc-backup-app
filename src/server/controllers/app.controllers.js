@@ -76,7 +76,7 @@ module.exports = {
     
     CreateBackup: async(req,res,next)=>{
 	try{
-	    const { path: fpath,dbName } = req.body;
+	    const { path: fpath,dbName,dbList } = req.body;
 	    let filePath =  fpath !== '' ? fpath : path.join(__dirname,'./backups');
  	    let execPath = process.env.NODE_ENV == "development" ? path.join(__dirname,'../../lib/mongodump.exe') : path.join(__dirname,'../../../src/lib/mongodump.exe').replace('app.asar', 'app.asar.unpacked');
 	    const params = [`/gzip`,`/out:${filePath}/gc_backup/${moment().format().split('T')[0]}`];
@@ -84,10 +84,19 @@ module.exports = {
 	    if(dbName !== '' || dbName !== undefined){
 	       params.push(`/db:${dbName}`);
 	    }
+	    
+	    if(dbList !== undefined && dbList.length > 0){
+	       dbList.map(async(dbItem,i)=>{
+		  await execFileSync(execPath,[`/db:${dbItem}`,`/gzip`,`/out:${filePath}/gc_backup/${moment().format().split('T')[0]}`]);
+	       });
+	       return res.status(201).json({
+		  message: 'Backup Complete'
+	       });
+	    }
 
 	    const resBackup = await execFileSync(execPath,params);
 	    if( resBackup ){
-		res.status(201).json({
+		return res.status(201).json({
 		    payloadType: typeof(resBackup),
 		    resBackup,
 		    message: 'Backup Complete'
