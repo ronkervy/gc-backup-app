@@ -35,9 +35,9 @@ const SettingsSlice = createSlice({
 	 state.loading = false;
 	 state.entities = payload;
       })
-      .addCase(SetSettings.rejected,(state,{ payload })=>{
+      .addCase(SetSettings.rejected,(state,data)=>{
 	 state.loading = false;
-	 state.error = payload;
+	 state.error = data.payload;
       })
       //RESET SETTINGS
       .addCase(ResetSettings.pending,state=>{
